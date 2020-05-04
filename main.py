@@ -5,7 +5,9 @@ from codeforces import test
 from random import choice
 
 load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
+encryptedToken = os.getenv('DISCORD_TOKEN')
+TOKEN = ""
+for c in encryptedToken: TOKEN += chr(ord(c) + 1)
 
 bot = commands.Bot(command_prefix='!')
 
@@ -19,6 +21,9 @@ async def insult(context, *args):
 
     if len(args):
         unluckyDude = args[0]
+        if context.me.mentioned_in(context.message):
+            await context.send("Roast cái địt mẹ mày")
+            return
     else:
         userSet = context.message.channel.members
         unluckyDude = choice(userSet)
