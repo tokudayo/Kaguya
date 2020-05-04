@@ -41,21 +41,31 @@ async def printInfo(context, *args):
     if (len(args) == 1):
         cfUser = CodeforcesUser(args[0])
         if not cfUser.isNULL:
-            response = ""
-            response += "> `Handle :`  " + cfUser.handle + '\n'
-            response += "> `Country :`  " + cfUser.country + '\n'
-            response += "> `Current rating :`  " + str(cfUser.rating) + '\n'
-            response += "> `Rank :`  "
-            if cfUser.rank == 'pupil': response += "rác rưởi"
-            else: response += cfUser.rank
-            await context.send(response)
+            embed = discord.Embed(title="Codeforces user : " + cfUser.handle, color=0xff3729)
+            embed.add_field(name="Country", value=cfUser.country, inline=True)
+            embed.add_field(name="Rating", value=cfUser.rating, inline=True)
+            embed.add_field(name="Rank", value=cfUser.rank, inline=True)
+            embed.url = "https://codeforces.com/profile/" + cfUser.handle
+            embed.set_thumbnail(url='https:' + cfUser.avatar)
+            await context.send(embed=embed)
         else:
             await context.send("`User not found.`")
     else:
         await context.send("`Missing 1 parameter (handle).`")
 
+@bot.command(name='test')
+async def test(context):
+    embed = discord.Embed(title="Codeforces user: " + "test", color=0xb83f27)
+    embed.add_field(name="Handle", value="test", inline=True)
+    embed.url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    embed.set_thumbnail(url='https:'+'//userpic.codeforces.com/no-avatar.jpg')
+    await context.send(embed=embed)
+
 @bot.event
 async def on_message(message):
+    if message.content.lower() == "good bot" and message.author.id==281411022881947654:
+        await message.channel.send("Thank you master-sama.")
+
     if len(message.content.split()) > 0:
         if message.content.split()[0] == "changePrefix":
             if len(message.content.split()) == 1:
