@@ -1,10 +1,6 @@
 import os
 
 from dotenv import load_dotenv
-from onstart import *
-from responses import *
-from dangerouscommands import *
-from pycf import *
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
