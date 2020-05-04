@@ -14,17 +14,22 @@ async def on_ready():
     print("Done")
 
 @bot.command(name='insult', help='Roasts someone', aliases=['roast'])
-async def insult(context):
+async def insult(context, *args):
     insults = open("data/insults.txt","r+", encoding="utf-8")
-    userSet = context.message.channel.members
-    unluckyDude = choice(userSet)
-    while unluckyDude == context.me: unluckyDude = choice(userSet)
+
+    if len(args):
+        unluckyDude = args[0]
+    else:
+        userSet = context.message.channel.members
+        unluckyDude = choice(userSet)
+        while unluckyDude == context.me: unluckyDude = choice(userSet)
+        unluckyDude = unluckyDude.mention
     lines = insults.readlines()
     chosen = choice(lines)
     response = ""
     for auto in chosen.split():
         if ord(auto[0]) not in range(ord('1'), ord('9') + 1): response += auto + " "
-    await context.send(unluckyDude.mention + " " + response)
+    await context.send(unluckyDude + " " + response)
 
 @bot.event
 async def on_message(message):
