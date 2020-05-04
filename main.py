@@ -1,54 +1,40 @@
-import os
-
+import os, discord
+from discord.ext import commands
 from dotenv import load_dotenv
+from codeforces import test
+from random import choice
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-client = discord.Client()
-VietKong = discord.Guild
+bot = commands.Bot(command_prefix='!')
 
-@client.event
+@bot.event
 async def on_ready():
-    startupInfo(client)
-    #during dev:
-    global VietKong
-    VietKong = discord.utils.get(client.guilds, name='Viet Kong')
-    #end
+    print("Done")
 
+@bot.command(name='insult', help='Roasts someone', aliases=['roast'])
+async def insult(context):
+    insults = open("data/insults.txt","r+", encoding="utf-8")
+    userSet = context.message.channel.members
+    unluckyDude = choice(userSet)
+    while unluckyDude == context.me: unluckyDude = choice(userSet)
+    lines = insults.readlines()
+    chosen = choice(lines)
+    response = ""
+    for auto in chosen.split():
+        if ord(auto[0]) not in range(ord('1'), ord('9') + 1): response += auto + " "
+    await context.send(unluckyDude.mention + " " + response)
 
-@client.event
-async def on_member_join(member):
-    await member.create_dm()
-    await member.dm_channel.send(
-        f'Hi {member.name}, welcome to my Discord server!'
-    )
-
-
-@client.event
+@bot.event
 async def on_message(message):
-    if message.author == client.user: return
+    if len(message.content.split()) > 0:
+        if message.content.split()[0] == "changePrefix":
+            if len(message.content.split()) == 1:
+                bot.command_prefix = ''
+            else:
+                bot.command_prefix = message.content.split()[1]
 
-    await mentionResponse(client.user, message)
-    await swearResponse(message)
-    await keywordResponse(message)
-    await jokeResponse(message)
-    await cfResponse(client.user, message)
-    if 'bác tài' in message.content.lower():
-        await gulag1(client, VietKong, message)
-    if message.content.lower().startswith("cho con chó") and 'gulag' in message.content.lower():
-        await gulag2(client, VietKong, message)
+    await bot.process_commands(message)
 
-
-@client.event
-async def on_message_delete(message):
-    responses = [
-        message.author.mention + " Mày đang giấu cái gì thế",
-        message.author.mention + " very ninja delete",
-        message.author.mention + " ninja delete <:pepeW:687878953419145296>"
-    ]
-    response = random.choice(responses)
-    if not message.author.bot: await message.channel.send(response)
-
-
-client.run(TOKEN)
+bot.run(TOKEN)
