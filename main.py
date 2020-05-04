@@ -1,7 +1,7 @@
 import os, discord
 from discord.ext import commands
 from dotenv import load_dotenv
-from codeforces import test
+from codeforces import CodeforcesUser
 from random import choice
 
 load_dotenv()
@@ -35,6 +35,24 @@ async def insult(context, *args):
     for auto in chosen.split():
         if ord(auto[0]) not in range(ord('1'), ord('9') + 1): response += auto + " "
     await context.send(unluckyDude + " " + response)
+
+@bot.command(name='info', help='Codeforces user info')
+async def printInfo(context, *args):
+    if (len(args) == 1):
+        cfUser = CodeforcesUser(args[0])
+        if not cfUser.isNULL:
+            response = ""
+            response += "> `Handle :`  " + cfUser.handle + '\n'
+            response += "> `Country :`  " + cfUser.country + '\n'
+            response += "> `Current rating :`  " + str(cfUser.rating) + '\n'
+            response += "> `Rank :`  "
+            if cfUser.rank == 'pupil': response += "rác rưởi"
+            else: response += cfUser.rank
+            await context.send(response)
+        else:
+            await context.send("`User not found.`")
+    else:
+        await context.send("`Missing 1 parameter (handle).`")
 
 @bot.event
 async def on_message(message):
