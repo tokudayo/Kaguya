@@ -12,10 +12,12 @@ class CodeforcesUser:
             self.handle = data['handle']
             self.rating = data['rating']
             self.rank = data['rank']
+            self.avatar = data['avatar']
             if 'country' in data: self.country = data['country']
 
     handle = ""
     isNULL = True
     rating = -1
-    rank = "Undefined"
-    country = "Undefined"
+    rank = "Unknown"
+    country = "Unknown"
+    avatar = ""
