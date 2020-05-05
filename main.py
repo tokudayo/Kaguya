@@ -63,8 +63,8 @@ async def dictLookup(context, *args):
         embed = discord.Embed(title=args[0], color=0xb83f27)
         word = Word(args[0])
         defs = ""
-        for auto in word.definition: defs += auto + '\n'
-        embed.add_field(name="Definition: ", value=defs, inline=False)
+        for auto in word.definition: defs += auto[0].upper() + auto[1:len(auto)] + '\n'
+        embed.add_field(name="Definition: ", value=defs, inline=False)  
         await context.send(embed=embed)
     else:
         await context.send("Missing one obvious argument: `!define [word to be defined]` <:pathetic:707148847817687100>")

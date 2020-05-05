@@ -13,6 +13,9 @@ class Word(object):
         rawData = requests.get(url + query + APIKey)
         jsonData = rawData.json()
         data = jsonData[0]
+        if data.size() == 0:
+            return
+            
         if type(data) != dict: #data is a string
             rawData = requests.get(url + data + APIKey)
             jsonData = rawData.json()
