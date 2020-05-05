@@ -7,20 +7,21 @@ class Word(object):
     definition = []
     stems = []
     isNULL = True
+    redirected = False
 
     def __init__(self, query):
-        self.isNULL = False
         rawData = requests.get(url + query + APIKey)
         jsonData = rawData.json()
+        if len(jsonData) == 0: return
+        self.isNULL = False
+        self.word = query
         data = jsonData[0]
-        if data.size() == 0:
-            return
-            
         if type(data) != dict: #data is a string
+            self.redirected = True
+            self.word = data
             rawData = requests.get(url + data + APIKey)
             jsonData = rawData.json()
             data = jsonData[0]
-        self.word = data['meta']['id']
         self.definition = data['shortdef']
         self.stems = data['meta']['stems']
         return
