@@ -2,6 +2,7 @@ import os, discord
 from discord.ext import commands
 from dotenv import load_dotenv
 from codeforces import CodeforcesUser
+from webster import Word
 from random import choice
 
 load_dotenv()
@@ -60,9 +61,8 @@ async def printInfo(context, *args):
 async def dictLookup(context, *args):
     if (len(args)):
         embed = discord.Embed(title=args[0], color=0xb83f27)
-        embed.add_field(name="Def: ", value="test", inline=True)
-        embed.url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-        embed.set_thumbnail(url='https:'+'//userpic.codeforces.com/no-avatar.jpg')
+        
+        embed.add_field(name="Definition: ", value="test", inline=False)
         await context.send(embed=embed)
     else:
         await context.send("Missing one obvious argument: `!define [word to be defined]` <:pathetic:707148847817687100>")
