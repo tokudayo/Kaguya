@@ -25,7 +25,7 @@ async def insult(context, *args):
             await context.send("Why would you try to do such thing to me?")
             return
         elif args[0][0] != '<' and args[0][1] != '@':
-            await context.send("If you want to roast someone, do it like this: " + bot.command_prefix + "roast [mention] " +  "<:pathetic:707148847817687100>")
+            await context.send("If you want to roast someone, do it like this: `" + bot.command_prefix + "roast [mention]` " +  "<:pathetic:707148847817687100>")
             return
     else:
         userSet = context.message.channel.members
@@ -56,13 +56,16 @@ async def printInfo(context, *args):
     else:
         await context.send("`Missing 1 parameter (handle).`")
 
-@bot.command(name='test')
-async def test(context):
-    embed = discord.Embed(title="Codeforces user: " + "test", color=0xb83f27)
-    embed.add_field(name="Handle", value="test", inline=True)
-    embed.url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    embed.set_thumbnail(url='https:'+'//userpic.codeforces.com/no-avatar.jpg')
-    await context.send(embed=embed)
+@bot.command(name='define')
+async def dictLookup(context, *args):
+    if (len(args)):
+        embed = discord.Embed(title="Definition for " + args[0], color=0xb83f27)
+        embed.add_field(name="Handle", value="test", inline=True)
+        embed.url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        embed.set_thumbnail(url='https:'+'//userpic.codeforces.com/no-avatar.jpg')
+        await context.send(embed=embed)
+    else:
+        await context.send("Missing one obvious argument: `!define [word to be defined]` <:pathetic:707148847817687100>")
 
 @bot.event
 async def on_message(message):
