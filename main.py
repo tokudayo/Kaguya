@@ -22,7 +22,7 @@ async def insult(context, *args):
     if len(args):
         unluckyDude = args[0]
         if context.me.mentioned_in(context.message):
-            await context.send("Roast cái địt mẹ mày")
+            await context.send("Why would you try to do such thing to me?")
             return
     else:
         userSet = context.message.channel.members
@@ -63,8 +63,9 @@ async def test(context):
 
 @bot.event
 async def on_message(message):
-    if message.content.lower() == "good bot" and message.author.id==281411022881947654:
-        await message.channel.send("Thank you master-sama.")
+    if message.content.lower() == "good bot":
+        if message.author.id==281411022881947654: await message.channel.send("Thank you, Master-sama.")
+        else: await message.channel.send("Thank you.")
 
     if len(message.content.split()) > 0:
         if message.content.split()[0] == "changePrefix":
