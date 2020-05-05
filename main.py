@@ -25,7 +25,7 @@ async def insult(context, *args):
             await context.send("Why would you try to do such thing to me?")
             return
         elif args[0][0] != '<' and args[0][1] != '@':
-            await context.send("If you want to roast someone, mention him in the message <:pathetic:707148847817687100>")
+            await context.send("If you want to roast someone, do it like this: " + bot.command_prefix + "roast [mention] " +  "<:pathetic:707148847817687100>")
             return
     else:
         userSet = context.message.channel.members
