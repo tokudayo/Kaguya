@@ -64,8 +64,8 @@ async def dictLookup(context, *args):
         if word.isNULL:
             await context.send("Sorry, can't seem to find the word.")
         else:
-            if word.redirected: context.send("I can't find the word. Showing definition for:")
-            embed = discord.Embed(title=args[0], color=0xb83f27)
+            if word.redirected: await context.send("I can't find the word. Showing definition for:")
+            embed = discord.Embed(title=word.word, color=0xb83f27)
             defs = ""
             for auto in word.definition: defs += auto[0].upper() + auto[1:len(auto)] + '\n'
             if len(defs) == 0: defs += "No definition :("

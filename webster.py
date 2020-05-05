@@ -1,6 +1,6 @@
 import requests, json
-url = 'https://dictionaryapi.com/api/v3/references/learners/json/'
-APIKey = '?key=281250e6-3e7e-4487-9b65-768400628bc0'
+url = 'https://dictionaryapi.com/api/v3/references/collegiate/json/'
+APIKey = '?key=6ee7b300-6ade-4755-9651-131478041b21'
 
 class Word(object):
     word = ""
