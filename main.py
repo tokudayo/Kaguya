@@ -54,13 +54,13 @@ async def printInfo(context, *args):
         else:
             await context.send("`User not found.`")
     else:
-        await context.send("`Missing 1 parameter (handle).`")
+        await context.send("Info who? Try `!info [handle]` <:pathetic:707148847817687100>")
 
 @bot.command(name='define')
 async def dictLookup(context, *args):
     if (len(args)):
-        embed = discord.Embed(title="Definition for " + args[0], color=0xb83f27)
-        embed.add_field(name="Handle", value="test", inline=True)
+        embed = discord.Embed(title=args[0], color=0xb83f27)
+        embed.add_field(name="Def: ", value="test", inline=True)
         embed.url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
         embed.set_thumbnail(url='https:'+'//userpic.codeforces.com/no-avatar.jpg')
         await context.send(embed=embed)
