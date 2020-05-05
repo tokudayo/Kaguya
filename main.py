@@ -60,7 +60,9 @@ async def printInfo(context, *args):
 @bot.command(name='define')
 async def dictLookup(context, *args):
     if (len(args)):
-        word = Word(args[0])
+        lookup = ""
+        for auto in args: lookup += auto + " "
+        word = Word(lookup)
         if word.isNULL:
             await context.send("Sorry, can't seem to find the word.")
         else:

@@ -10,7 +10,11 @@ class Word(object):
         self.stems = []
         self.isNULL = True
         self.redirected = False
-        rawData = requests.get(url + query + APIKey)
+        lookup = ""
+        for auto in query.split()[0:len(query.split())-1]:
+            lookup += auto + '-'
+        lookup += query.split()[len(query.split())-1]
+        rawData = requests.get(url + lookup + APIKey)
         jsonData = rawData.json()
         if len(jsonData) == 0: return
         self.isNULL = False
