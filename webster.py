@@ -1,6 +1,8 @@
 import requests, json
 url = 'https://dictionaryapi.com/api/v3/references/collegiate/json/'
-APIKey = '?key=6ee7b300-6ade-4755-9651-131478041b21'
+encryptedKey = "5a[o3,[[-X)&&#,WZ[#*-++#/,+'#')'*-.&*'X('"
+APIKey = ""
+for auto in encryptedKey: APIKey += chr(ord(auto) + 10)
 
 class Word(object):
 
