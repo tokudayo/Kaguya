@@ -1,9 +1,11 @@
 
 # Kaguya
 
-Multi-purpose Discord bot wrriten in Python
+Multi-purpose Discord bot wrriten in (mostly) Python.
 
 ## Features (on development)
-- Kaguya can perform word look-up (Merriam-Webster dictionary)
-- Kaguya can do Codeforces user info look-up (on dev)
-- She can aslo roast you
+- Word look-up on Merriam-Webster dictionary (almost finished)
+- Wikipedia article summary (almost finished)
+- Codeforces related features (on dev)
+- General purpose features (on dev)
+## Changelog
