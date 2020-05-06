@@ -92,10 +92,11 @@ async def dictLookup(context, *args):
 @bot.command(name='wiki')
 async def wikiLookup(context, *args):
     if (len(args)):
-        page = WikiPage(args)
-        embed = discord.Embed(title=page.title, color=0xb83f27)
-        print(type(page))
-        embed.add_field(name='Summary:',value=page.shortSummary)
+        wikiPage = WikiPage(args)
+        embed = discord.Embed(title=wikiPage.title, color=0xb83f27)
+        embed.url = wikiPage.url
+        if wikiPage.title != "No article found." and wikiPage.title != "Topic too broad.":
+            embed.add_field(name='Summary:',value=wikiPage.shortSummary)
         await context.send(embed=embed)
     else:
         await context.send("Missing one obvious argument: `!wiki [subject]` <:pathetic:707148847817687100>")
