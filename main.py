@@ -3,6 +3,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from codeforces import CodeforcesUser
 from webster import Word
+from wiki import WikiPage
 from random import choice
 
 load_dotenv()
@@ -87,6 +88,17 @@ async def dictLookup(context, *args):
             await context.send(embed=embed)
     else:
         await context.send("Missing one obvious argument: `!define [word to be defined]` <:pathetic:707148847817687100>")
+
+@bot.command(name='wiki')
+async def wikiLookup(context, *args):
+    if (len(args)):
+        page = WikiPage(args)
+        embed = discord.Embed(title=page.title, color=0xb83f27)
+        print(type(page))
+        embed.add_field(name='Summary:',value=page.shortSummary)
+        await context.send(embed=embed)
+    else:
+        await context.send("Missing one obvious argument: `!wiki [subject]` <:pathetic:707148847817687100>")
 
 @bot.event
 async def on_message(message):
