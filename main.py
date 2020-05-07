@@ -116,4 +116,17 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
+import matplotlib.pyplot as plt
+
+@bot.command(name='test')
+async def test(context, *args):
+    print(args)
+    plt.figure()
+    plt.plot(args, [0, 0, 0, 0, 0])
+    plt.title('Người yêu của Duy')
+    plt.ylabel('Count')
+    plt.xlabel('Age')
+    plt.savefig('plot.png')
+    await context.send(file=discord.File('plot.png'))
+
 bot.run(TOKEN)
