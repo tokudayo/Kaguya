@@ -5,6 +5,7 @@ from codeforces import CodeforcesUser
 from webster import Word
 from wiki import WikiPage
 from random import choice
+from datetime import datetime
 
 load_dotenv()
 encryptedToken = os.getenv('DISCORD_TOKEN')
@@ -53,6 +54,31 @@ async def printInfo(context, *args):
             embed.url = "https://codeforces.com/profile/" + cfUser.handle
             embed.set_thumbnail(url='https:' + cfUser.avatar)
             await context.send(embed=embed)
+        else:
+            await context.send("`User not found.`")
+    else:
+        await context.send("Info who? Try `!info [handle]` <:pathetic:707148847817687100>")
+
+@bot.command(name='rating', help='Codeforces user info')
+async def printRating(context, *args):
+    if (len(args) == 1):
+        cfUser = CodeforcesUser(args[0])
+        if not cfUser.isNULL:
+            #print(len(cfUser.ratingChange))
+            plt.figure()
+            '''
+            ticks = []
+            Min = cfUser.ratingChange[0][0]
+            Max = Min
+            if len(cfUser.ratingChange) > 1: Max = cfUser.ratingChange[len(cfUser.ratingChange) - 1
+            plt.xticks([x[0] for x in cfUser.ratingChange],[str(datetime.fromtimestamp(x[0]).year) for x in cfUser.ratingChange])
+            '''
+            plt.plot([x[0] for x in cfUser.ratingChange], [x[1] for x in cfUser.ratingChange], 'r')
+            plt.title('Rating of ' + cfUser.handle)
+            plt.ylabel('Rating')
+            plt.xlabel('Time')
+            plt.savefig('plot.png')
+            await context.send(file=discord.File('plot.png'))
         else:
             await context.send("`User not found.`")
     else:
@@ -122,7 +148,8 @@ import matplotlib.pyplot as plt
 async def test(context, *args):
     print(args)
     plt.figure()
-    plt.plot(args, [0, 0, 0, 0, 0])
+    plt.plot([int(x) for x in args], [10, 20, 10, 30, 5], 'r')
+    plt.plot([int(x) for x in args], [10, 20, 10, 30, 5], 'bo')
     plt.title('Người yêu của Duy')
     plt.ylabel('Count')
     plt.xlabel('Age')
