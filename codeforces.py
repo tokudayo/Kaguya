@@ -38,11 +38,19 @@ class CodeforcesUser:
 
 
 
+class CodeforcesProblem:
+
+
+    def __init__(self, data):
+        pass
+
+
+
 class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
 
 
     def __init__(self, bot):
-        self.bot = bot
+        pass
 
 
     @commands.command(name='info', help='Codeforces user info look-up.')

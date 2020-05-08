@@ -76,4 +76,4 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
                 embed.add_field(name='Summary:',value=wikiPage.shortSummary)
             await context.send(embed=embed)
         else:
-            await context.send("Missing one obvious argument: `!wiki [subject]` <:pathetic:707148847817687100>")
+            await context.send("Missing one obvious argument: `!wiki [topic]` <:pathetic:707148847817687100>")
