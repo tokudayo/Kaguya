@@ -7,11 +7,14 @@ from general import GeneralPurpose
 
 @bot.event
 async def on_message(message):
+
+    # look for 'good bot' commendation
     if message.content.lower() == "good bot":
         if message.author.id==281411022881947654: await message.channel.send("Thank you, Master-sama.")
         else: await message.channel.send("Thank you.")
-
-    if len(message.content.split()) > 0:
+        
+    # look for changePrefix [prefix]
+    if len(message.content.split()):
         if message.content.split()[0] == "changePrefix":
             if len(message.content.split()) == 1:
                 bot.command_prefix = ''
@@ -24,9 +27,10 @@ async def on_message(message):
 async def on_ready():
     bot.add_cog(GeneralPurpose(bot))
     bot.add_cog(CodeforcesCommand(bot))
-    print("Done")
+    print("Initialization completed.")
 
 
+# Run the bot
 load_dotenv()
 encryptedToken = os.getenv('DISCORD_TOKEN')
 TOKEN = ""

@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 
 class CodeforcesUser:
 
+
     def __init__(self, query):
         self.handle = ""
         self.isNULL = True
@@ -13,7 +14,8 @@ class CodeforcesUser:
         self.country = "Unknown"
         self.avatar = ""
         self.ratingChange = []
-        
+
+        # Get date from Codeforces API and process
         url = "https://codeforces.com/api/user.info?handles=" + query
         rawData = requests.get(url)
         jsonData = rawData.json()
@@ -35,7 +37,9 @@ class CodeforcesUser:
             jsonData = rawData.json()
 
 
+
 class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
+
 
     def __init__(self, bot):
         self.bot = bot

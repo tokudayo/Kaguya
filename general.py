@@ -60,8 +60,7 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
                         if (index+1) % 5 == 0 or index == len(word.definition)-1:
                             embed.add_field(name="\u200b ", value=temp, inline=False)
                             temp = ""
-                        index += 1
-                            
+                        index += 1  
                 await context.send(embed=embed)
         else:
             await context.send("Missing one obvious argument: `!define [word to be defined]` <:pathetic:707148847817687100>")
