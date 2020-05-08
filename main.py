@@ -17,6 +17,7 @@ async def on_message(message):
         else: await message.channel.send("Thank you.")
 
     # look for changePrefix [prefix]
+    """
     if len(message.content.split()):
         if message.content.split()[0] == "changePrefix":
             if len(message.content.split()) == 1:
@@ -24,6 +25,7 @@ async def on_message(message):
             else:
                 bot.command_prefix = message.content.split()[1]
     await bot.process_commands(message)
+    """
 
 
 @bot.event
