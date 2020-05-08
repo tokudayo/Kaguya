@@ -84,6 +84,30 @@ async def printRating(context, *args):
     else:
         await context.send("Info who? Try `!info [handle]` <:pathetic:707148847817687100>")
 
+@bot.command(name='compare', help='Codeforces user info')
+async def compareRating(context, *args):
+    if (len(args) > 1):
+        plt.figure()
+        plt.ylabel('Rating')
+        plt.xlabel('Time')
+        plt.title('Title')
+        Min = int(datetime.timestamp(datetime.now()))
+        Max = 0
+        for auto in args:
+            cfUser = CodeforcesUser(auto)
+            if not cfUser.isNULL and len(cfUser.ratingChange) > 0:
+                Min = min(cfUser.ratingChange[0][0], Min)
+                Max = max(Max, cfUser.ratingChange[len(cfUser.ratingChange) - 1][0])
+                line, = plt.plot([x[0] for x in cfUser.ratingChange], [x[1] for x in cfUser.ratingChange], label=cfUser.handle)
+                print(line.get_color())
+                plt.legend()
+        print(Min)
+        print(Max)
+        plt.savefig('plot.png')
+        await context.send(file=discord.File('plot.png'))
+    else:
+        await context.send("Info who? Try `!info [handle]` <:pathetic:707148847817687100>")
+
 @bot.command(name='define')
 async def dictLookup(context, *args):
     if (len(args)):
