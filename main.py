@@ -60,43 +60,21 @@ async def printInfo(context, *args):
         await context.send("Info who? Try `!info [handle]` <:pathetic:707148847817687100>")
 
 @bot.command(name='rating', help='Codeforces user info')
-async def printRating(context, *args):
-    if (len(args) == 1):
-        cfUser = CodeforcesUser(args[0])
-        if not cfUser.isNULL:
-            #print(len(cfUser.ratingChange))
-            plt.figure()
-            plt.plot([x[0] for x in cfUser.ratingChange], [x[1] for x in cfUser.ratingChange], 'r')
-            plt.title('Rating of ' + cfUser.handle)
-            plt.ylabel('Rating')
-            plt.xlabel('Time')
-            plt.savefig('plot.png')
-            await context.send(file=discord.File('plot.png'))
-        else:
-            await context.send("`User not found.`")
-    else:
-        await context.send("Info who? Try `!info [handle]` <:pathetic:707148847817687100>")
-
-@bot.command(name='compare', help='Codeforces user info')
-async def compareRating(context, *args):
-    if (len(args) > 1):
+async def ratingGraph(context, *args):
+    if (len(args)):
         plt.figure()
         plt.ylabel('Rating')
         plt.xlabel('Time')
         title = "Rating of "
-        Min = int(datetime.timestamp(datetime.now()))
-        Max = 0
         for auto in args:
             cfUser = CodeforcesUser(auto)
             if not cfUser.isNULL and len(cfUser.ratingChange) > 0:
                 title += cfUser.handle + " "
-                Min = min(cfUser.ratingChange[0][0], Min)
-                Max = max(Max, cfUser.ratingChange[len(cfUser.ratingChange) - 1][0])
                 line, = plt.plot([x[0] for x in cfUser.ratingChange], [x[1] for x in cfUser.ratingChange], label=cfUser.handle)
                 print(line.get_color())
                 plt.legend()
         tick = plt.xticks()
-        labels = [] 
+        labels = []
         for auto in tick[0]:
             T = datetime.fromtimestamp(auto)
             labels.append(str(int(T.month)) + "/" + str(int(T.year)))
@@ -107,7 +85,7 @@ async def compareRating(context, *args):
         plt.savefig('plot.png')
         await context.send(file=discord.File('plot.png'))
     else:
-        await context.send("Info who? Try `!info [handle]` <:pathetic:707148847817687100>")
+        await context.send("Rating of whom? Try `!rating [list of user(s)]` <:pathetic:707148847817687100>")
 
 @bot.command(name='define')
 async def dictLookup(context, *args):
