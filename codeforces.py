@@ -42,7 +42,16 @@ class CodeforcesProblem:
 
 
     def __init__(self, data):
-        pass
+        self.contestId = ""
+        self.problemsetName = ""
+        self.index = ""
+
+        for key in data:
+            self.key = data[key]
+        if 'contestId' in data and 'problemsetName' in data and 'index' in data:
+            self.url = "https://codeforces.com/problemset/problem/" + str(self.contestId) + "/" + self.index
+        else:
+            self.url = ""
 
 
 
@@ -50,7 +59,7 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
 
 
     def __init__(self, bot):
-        pass
+        self.bot = bot
 
 
     @commands.command(name='info', help='Codeforces user info look-up.')
@@ -96,3 +105,21 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
             await context.send(file=discord.File('plot.png'))
         else:
             await context.send("Rating of whom? Try `!rating [list of user(s)]` <:pathetic:707148847817687100>")
+
+
+    @commands.command(name='problem', help='Information regarding Codeforces problems with specific attributes.')
+    async def problemQuery(self, context, *args):
+        if len(args):
+            query = ""
+            for auto in args[:len(args) - 1]: query += auto + ";"
+            query += args[len(args) - 1]
+            url = "https://codeforces.com/api/problemset.problems?tags="
+            rawData = requests.get(url + query)
+            jsonData = rawData.json()
+            if jsonData['status'] == 'OK':
+                data = jsonData['result']
+                problems = data['problems']
+                # problemStats = data['problemStatistics']
+                await context.send(str(len(problems)) +  " entries found.")
+        else:
+            await context.send("Please specify the tag(s) of problems. Try `!problem [list of tags]`")
