@@ -71,7 +71,6 @@ async def ratingGraph(context, *args):
             if not cfUser.isNULL and len(cfUser.ratingChange) > 0:
                 title += cfUser.handle + " "
                 line, = plt.plot([x[0] for x in cfUser.ratingChange], [x[1] for x in cfUser.ratingChange], label=cfUser.handle)
-                print(line.get_color())
                 plt.legend()
         tick = plt.xticks()
         labels = []
