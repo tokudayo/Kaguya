@@ -70,7 +70,7 @@ async def ratingGraph(context, *args):
             cfUser = CodeforcesUser(auto)
             if not cfUser.isNULL and len(cfUser.ratingChange) > 0:
                 title += cfUser.handle + " "
-                line, = plt.plot([x[0] for x in cfUser.ratingChange], [x[1] for x in cfUser.ratingChange], label=cfUser.handle)
+                plt.plot([x[0] for x in cfUser.ratingChange], [x[1] for x in cfUser.ratingChange], label=cfUser.handle)
                 plt.legend()
         tick = plt.xticks()
         labels = []
