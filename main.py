@@ -66,13 +66,6 @@ async def printRating(context, *args):
         if not cfUser.isNULL:
             #print(len(cfUser.ratingChange))
             plt.figure()
-            '''
-            ticks = []
-            Min = cfUser.ratingChange[0][0]
-            Max = Min
-            if len(cfUser.ratingChange) > 1: Max = cfUser.ratingChange[len(cfUser.ratingChange) - 1
-            plt.xticks([x[0] for x in cfUser.ratingChange],[str(datetime.fromtimestamp(x[0]).year) for x in cfUser.ratingChange])
-            '''
             plt.plot([x[0] for x in cfUser.ratingChange], [x[1] for x in cfUser.ratingChange], 'r')
             plt.title('Rating of ' + cfUser.handle)
             plt.ylabel('Rating')
@@ -90,19 +83,27 @@ async def compareRating(context, *args):
         plt.figure()
         plt.ylabel('Rating')
         plt.xlabel('Time')
-        plt.title('Title')
+        title = "Rating of "
         Min = int(datetime.timestamp(datetime.now()))
         Max = 0
         for auto in args:
             cfUser = CodeforcesUser(auto)
             if not cfUser.isNULL and len(cfUser.ratingChange) > 0:
+                title += cfUser.handle + " "
                 Min = min(cfUser.ratingChange[0][0], Min)
                 Max = max(Max, cfUser.ratingChange[len(cfUser.ratingChange) - 1][0])
                 line, = plt.plot([x[0] for x in cfUser.ratingChange], [x[1] for x in cfUser.ratingChange], label=cfUser.handle)
                 print(line.get_color())
                 plt.legend()
-        print(Min)
-        print(Max)
+        tick = plt.xticks()
+        labels = [] 
+        for auto in tick[0]:
+            T = datetime.fromtimestamp(auto)
+            labels.append(str(int(T.month)) + "/" + str(int(T.year)))
+            
+        plt.xticks(ticks = tick[0], labels=labels)
+        if title == "Rating of ": title += "no one."
+        plt.title(title)
         plt.savefig('plot.png')
         await context.send(file=discord.File('plot.png'))
     else:
