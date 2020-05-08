@@ -24,8 +24,8 @@ async def on_message(message):
                 bot.command_prefix = ''
             else:
                 bot.command_prefix = message.content.split()[1]
-    await bot.process_commands(message)
     """
+    await bot.process_commands(message)
 
 
 @bot.event
