@@ -32,8 +32,10 @@ class CodeforcesUser:
             ratingData = rawData.json()['result']
             for auto in ratingData:
                 self.ratingChange.append((auto['ratingUpdateTimeSeconds'],auto['newRating']))
+            """
             if len(ratingData):
                 self.ratingChange.append([int(datetime.timestamp(datetime.now())), ratingData[len(ratingData) - 1]['newRating']])
+            """
             jsonData = rawData.json()
 
 
