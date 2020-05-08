@@ -1,5 +1,7 @@
-import requests, json
+import requests, json, discord
 from datetime import datetime
+from discord.ext import commands
+from matplotlib import pyplot as plt
 
 class CodeforcesUser:
 
@@ -24,7 +26,6 @@ class CodeforcesUser:
             if 'rank' in data: self.rank = data['rank']
             self.avatar = data['avatar']
             if 'country' in data: self.country = data['country']
-            
             rawData = requests.get("https://codeforces.com/api/user.rating?handle=" + self.handle)
             ratingData = rawData.json()['result']
             for auto in ratingData:
@@ -33,3 +34,53 @@ class CodeforcesUser:
                 self.ratingChange.append([int(datetime.timestamp(datetime.now())), ratingData[len(ratingData) - 1]['newRating']])
             jsonData = rawData.json()
 
+
+class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
+
+    def __init__(self, bot):
+        self.bot = bot
+
+
+    @commands.command(name='info', help='Codeforces user info')
+    async def printInfo(self, context, *args):
+        if (len(args) == 1):
+            cfUser = CodeforcesUser(args[0])
+            if not cfUser.isNULL:
+                embed = discord.Embed(title="Codeforces user : " + cfUser.handle, color=0xff3729)
+                embed.add_field(name="Country", value=cfUser.country, inline=True)
+                embed.add_field(name="Rating", value=cfUser.rating, inline=True)
+                embed.add_field(name="Rank", value=cfUser.rank, inline=True)
+                embed.url = "https://codeforces.com/profile/" + cfUser.handle
+                embed.set_thumbnail(url='https:' + cfUser.avatar)
+                await context.send(embed=embed)
+            else:
+                await context.send("`User not found.`")
+        else:
+            await context.send("Info who? Try `!info [handle]` <:pathetic:707148847817687100>")
+
+
+    @commands.command(name='rating', help='Codeforces user info')
+    async def ratingGraph(self, context, *args):
+        if (len(args)):
+            plt.figure()
+            plt.ylabel('Rating')
+            plt.xlabel('Time')
+            title = "Rating of "
+            for auto in args:
+                cfUser = CodeforcesUser(auto)
+                if not cfUser.isNULL and len(cfUser.ratingChange) > 0:
+                    title += cfUser.handle + " "
+                    plt.plot([x[0] for x in cfUser.ratingChange], [x[1] for x in cfUser.ratingChange], label=cfUser.handle)
+                    plt.legend()
+            tick = plt.xticks()
+            labels = []
+            for auto in tick[0]:
+                T = datetime.fromtimestamp(auto)
+                labels.append(str(int(T.month)) + "/" + str(int(T.year)))
+            plt.xticks(ticks = tick[0], labels=labels)
+            if title == "Rating of ": title += "no one."
+            plt.title(title)
+            plt.savefig('plot.png')
+            await context.send(file=discord.File('plot.png'))
+        else:
+            await context.send("Rating of whom? Try `!rating [list of user(s)]` <:pathetic:707148847817687100>")
