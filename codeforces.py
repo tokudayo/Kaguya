@@ -45,7 +45,7 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
         self.bot = bot
 
 
-    @commands.command(name='info', help='Codeforces user info')
+    @commands.command(name='info', help='Codeforces user info look-up.')
     async def printInfo(self, context, *args):
         if (len(args) == 1):
             cfUser = CodeforcesUser(args[0])
@@ -63,7 +63,7 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
             await context.send("Info who? Try `!info [handle]` <:pathetic:707148847817687100>")
 
 
-    @commands.command(name='rating', help='Codeforces user info')
+    @commands.command(name='rating', help='Draw a rating graph of Codeforces user(s).')
     async def ratingGraph(self, context, *args):
         if (len(args)):
             plt.figure()

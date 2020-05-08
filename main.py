@@ -5,6 +5,9 @@ from codeforces import CodeforcesCommand
 from general import GeneralPurpose
 
 
+bot = commands.Bot(command_prefix='!')
+
+
 @bot.event
 async def on_message(message):
 
@@ -12,7 +15,7 @@ async def on_message(message):
     if message.content.lower() == "good bot":
         if message.author.id==281411022881947654: await message.channel.send("Thank you, Master-sama.")
         else: await message.channel.send("Thank you.")
-        
+
     # look for changePrefix [prefix]
     if len(message.content.split()):
         if message.content.split()[0] == "changePrefix":
@@ -35,5 +38,4 @@ load_dotenv()
 encryptedToken = os.getenv('DISCORD_TOKEN')
 TOKEN = ""
 for c in encryptedToken: TOKEN += chr(ord(c) + 1)
-bot = commands.Bot(command_prefix='!')
 bot.run(TOKEN)

@@ -11,7 +11,7 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
         self.bot = bot
     
 
-    @commands.command(name='insult', help='Roasts someone', aliases=['roast'])
+    @commands.command(name='insult', help='Roasts a random dude or a specific person.', aliases=['roast'])
     async def insult(self, context, *args):
         insults = open("data/insults.txt","r+", encoding="utf-8")
         if len(args):
@@ -35,7 +35,7 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
         await context.send(unluckyDude + " " + response)
 
 
-    @commands.command(name='define')
+    @commands.command(name='define', help='Word look-up in English-English Merriam-Webster dictionary.')
     async def dictLookup(self, context, *args):
         if (len(args)):
             lookup = ""
@@ -66,7 +66,7 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
             await context.send("Missing one obvious argument: `!define [word to be defined]` <:pathetic:707148847817687100>")
 
 
-    @commands.command(name='wiki')
+    @commands.command(name='wiki', help='Shows Wikipedia summary for a topic.')
     async def wikiLookup(self, context, *args):
         if (len(args)):
             wikiPage = WikiPage(args)
