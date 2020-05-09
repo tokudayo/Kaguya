@@ -67,6 +67,25 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
 
     def __init__(self, bot):
         self.bot = bot
+        self.loadProblems()
+
+
+    def loadProblems(self):
+        self.problems = []
+        url = "https://codeforces.com/api/problemset.problems?tags="
+        rawData = requests.get(url)
+        jsonData = rawData.json()
+        if jsonData['status'] == 'OK':
+            data = jsonData['result']
+            problemsDat = data['problems']
+            problemStat = data['problemStatistics']
+            for index in range(0,len(problemsDat)): 
+                problem = problemsDat[index]
+                problem['solvedCount'] = problemStat[index]['solvedCount']
+                self.problems.append(CodeforcesProblem(problem))
+            return 'OK'
+        else:
+            return 'ERROR'
 
 
     des__info = "Codeforces user info look-up."
@@ -118,23 +137,11 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
             await context.send("Rating of whom? Try `!rating [list of user(s)]` <:pathetic:707148847817687100>")
 
 
-    problems = []
-
     des__load = "Load the lastest of Codeforces official problems database."
 
     @commands.command(name='load', brief=des__load, description=des__load)
     async def problemUpdate(self, context):
-        url = "https://codeforces.com/api/problemset.problems?tags="
-        rawData = requests.get(url)
-        jsonData = rawData.json()
-        if jsonData['status'] == 'OK':
-            data = jsonData['result']
-            problemsDat = data['problems']
-            problemStat = data['problemStatistics']
-            for index in range(0,len(problemsDat)): 
-                problem = problemsDat[index]
-                problem['solvedCount'] = problemStat[index]['solvedCount']
-                self.problems.append(CodeforcesProblem(problem))
+        if self.loadProblems() == 'OK':
             await context.send(f"Data of {str(len(self.problems))} problems loaded.")
         else:
             context.send("Unexpected error occured while connecting to Codeforces' API server.")
