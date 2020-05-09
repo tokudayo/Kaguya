@@ -46,6 +46,7 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
             else:
                 if word.redirected: await context.send("I can't find the word. Showing definition for:")
                 embed = discord.Embed(title=word.word, color=0xb83f27)
+                embed.set_author(name="")
                 if len(word.definition) == 0:
                     embed.add_field(name="\u200b", value="No definition", inline=False)
                 else:
@@ -71,6 +72,7 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
         if (len(args)):
             wikiPage = WikiPage(args)
             embed = discord.Embed(title=wikiPage.title, color=0xb83f27)
+            embed.set_author(name="")
             embed.url = wikiPage.url
             if wikiPage.title != "No article found." and wikiPage.title != "Topic too broad.":
                 embed.add_field(name='Summary:',value=wikiPage.shortSummary)
