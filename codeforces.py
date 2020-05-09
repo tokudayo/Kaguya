@@ -113,6 +113,29 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
             await context.send("Rating of whom? Try `!rating [list of user(s)]` <:pathetic:707148847817687100>")
 
 
+    problems = []
+
+    des__load = "Load the lastest of Codeforces official problems database."
+
+    @commands.command(name='load', brief=des__load, description=des__load)
+    async def problemUpdate(self, context):
+        url = "https://codeforces.com/api/problemset.problems?tags="
+        rawData = requests.get(url)
+        jsonData = rawData.json()
+        if jsonData['status'] == 'OK':
+            data = jsonData['result']
+            problemsDat = data['problems']
+            problemStat = data['problemStatistics']
+            for index in range(0,len(problemsDat)): 
+                problem = problemsDat[index]
+                problem['solvedCount'] = problemStat[index]['solvedCount']
+                self.problems.append(CodeforcesProblem(problem))
+            await context.send(f"Data of {str(len(self.problems))} problems loaded.")
+        else:
+            context.send("Unexpected error occured while connecting to Codeforces' API server.")
+
+
+
     problemTags = ['data_structures', 'implementation', 'brute_force', 'math', 'dfs_and_similar', 'graphs', 'greedy', 'dp', 'binary_search', 'constructive_algorithms', 'sortings', 'strings', 'matrices', 'trees', 'dsu', 'number_theory', 'shortest_paths', 'two_pointers', 'bitmasks', 'combinatorics', 'fft', 'hashing', 'interactive', 'probabilities', 'divide_and_conquer', 'games', 'geometry', 'string_suffix_structures', 'meet-in-the-middle', 'ternary_search', 'flows', 'expression_parsing', '*special', 'graph_matchings', 'chinese_remainder_theorem', '2-sat', 'schedules']
     
     des__problem = ("Return information of problems having specified tags.\n"
@@ -120,23 +143,10 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
 
     for tag in problemTags: des__problem += tag + "  "
 
+
     @commands.command(name='problem', brief='Codeforces problems query.', description=des__problem)
     async def problemQuery(self, context, *tags):
         if len(tags):
-            query = ""
-            for tag in tags: 
-                for char in tag: 
-                    if char == "_": query += "+"
-                    else: query += char
-                query += ";"
-            url = "https://codeforces.com/api/problemset.problems?tags="
-            # print(url+query)
-            rawData = requests.get(url + query)
-            jsonData = rawData.json()
-            if jsonData['status'] == 'OK':
-                data = jsonData['result']
-                problems = data['problems']
-                # problemStats = data['problemStatistics']
-                await context.send(str(len(problems)) +  " entries found.")
+            await context.send(f"Database contains {str(len(self.problems))} problems.")
         else:
             await context.send("Please specify the tag(s) of problems. Try `!problem [list of tags]`")
