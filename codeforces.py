@@ -2,6 +2,7 @@ import requests, json, discord
 from datetime import datetime
 from discord.ext import commands
 from matplotlib import pyplot as plt
+import random
 
 class CodeforcesUser:
 
@@ -47,10 +48,14 @@ class CodeforcesProblem:
     def __init__(self, data):
         self.contestId = ""
         self.index = ""
+        self.rating = -1
 
-        for key in data:
-            self.key = data[key]
+        self.name = data['name']
+        self.tags = data['tags']
+        if 'rating' in data: self.rating = data['rating']
         if 'contestId' in data and 'index' in data:
+            self.contestId = data['contestId']
+            self.index = data['index']
             self.url = "https://codeforces.com/problemset/problem/" + str(self.contestId) + "/" + self.index
         else:
             self.url = ""
@@ -135,7 +140,6 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
             context.send("Unexpected error occured while connecting to Codeforces' API server.")
 
 
-
     problemTags = ['data_structures', 'implementation', 'brute_force', 'math', 'dfs_and_similar', 'graphs', 'greedy', 'dp', 'binary_search', 'constructive_algorithms', 'sortings', 'strings', 'matrices', 'trees', 'dsu', 'number_theory', 'shortest_paths', 'two_pointers', 'bitmasks', 'combinatorics', 'fft', 'hashing', 'interactive', 'probabilities', 'divide_and_conquer', 'games', 'geometry', 'string_suffix_structures', 'meet-in-the-middle', 'ternary_search', 'flows', 'expression_parsing', '*special', 'graph_matchings', 'chinese_remainder_theorem', '2-sat', 'schedules']
     
     des__problem = ("Return information of problems having specified tags.\n"
@@ -143,10 +147,30 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
 
     for tag in problemTags: des__problem += tag + "  "
 
-
     @commands.command(name='problem', brief='Codeforces problems query.', description=des__problem)
     async def problemQuery(self, context, *tags):
         if len(tags):
-            await context.send(f"Database contains {str(len(self.problems))} problems.")
+            query = []
+            for auto in tags:
+                new = ""
+                for char in auto:
+                    if char=="_": new += " "
+                    else: new += char
+                query.append(new)
+            query = set(query)
+            entries = []
+            for problem in self.problems:
+                if query.issubset(set(problem.tags)):
+                    entries.append(problem)
+            # to be fixed
+            response = "```"
+            random.seed()
+            choosen = random.choices(entries, k=min(10, len(entries)))
+            choosen = set(choosen)
+            for problem in choosen:
+                response += problem.name + '\n'
+            await context.send(f"Found {str(len(entries))} entries. Showing {str(len(choosen))} random entries:")
+            await context.send(response + "```")
+
         else:
             await context.send("Please specify the tag(s) of problems. Try `!problem [list of tags]`")
