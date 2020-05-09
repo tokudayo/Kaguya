@@ -8,7 +8,6 @@ class CodeforcesUser:
 
     def __init__(self, query):
         self.handle = ""
-        self.isNULL = True
         self.rating = 0
         self.rank = "No rank"
         self.country = "Unknown"
@@ -37,6 +36,8 @@ class CodeforcesUser:
                 self.ratingChange.append([int(datetime.timestamp(datetime.now())), ratingData[len(ratingData) - 1]['newRating']])
             """
             jsonData = rawData.json()
+        else:
+            self.isNULL = True
 
 
 
@@ -45,12 +46,11 @@ class CodeforcesProblem:
 
     def __init__(self, data):
         self.contestId = ""
-        self.problemsetName = ""
         self.index = ""
 
         for key in data:
             self.key = data[key]
-        if 'contestId' in data and 'problemsetName' in data and 'index' in data:
+        if 'contestId' in data and 'index' in data:
             self.url = "https://codeforces.com/problemset/problem/" + str(self.contestId) + "/" + self.index
         else:
             self.url = ""
@@ -64,10 +64,12 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
         self.bot = bot
 
 
-    @commands.command(name='info', help='Codeforces user info look-up.')
-    async def printInfo(self, context, *args):
-        if (len(args) == 1):
-            cfUser = CodeforcesUser(args[0])
+    des__info = "Codeforces user info look-up."
+
+    @commands.command(name='info', brief=des__info, description=des__info)
+    async def printInfo(self, context, handle=""):
+        if (handle):
+            cfUser = CodeforcesUser(handle)
             if not cfUser.isNULL:
                 embed = discord.Embed(title="Codeforces user : " + cfUser.handle, color=0xff3729)
                 embed.add_field(name="Country", value=cfUser.country, inline=True)
@@ -82,14 +84,16 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
             await context.send("Info who? Try `!info [handle]` <:pathetic:707148847817687100>")
 
 
-    @commands.command(name='rating', help='Draw a rating graph of Codeforces user(s).')
-    async def ratingGraph(self, context, *args):
-        if (len(args)):
+    des__rating = "Draw a rating graph of Codeforces user(s)."
+
+    @commands.command(name='rating', brief=des__rating, description=des__rating)
+    async def ratingGraph(self, context, *users):
+        if (len(users)):
             plt.figure()
             plt.ylabel('Rating')
             plt.xlabel('Time')
             title = "Rating of "
-            for auto in args:
+            for auto in users:
                 cfUser = CodeforcesUser(auto)
                 if not cfUser.isNULL and len(cfUser.ratingChange) > 0:
                     title += cfUser.handle + " "
@@ -109,13 +113,24 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
             await context.send("Rating of whom? Try `!rating [list of user(s)]` <:pathetic:707148847817687100>")
 
 
-    @commands.command(name='problem', help='Information regarding Codeforces problems with specific attributes.')
-    async def problemQuery(self, context, *args):
-        if len(args):
+    problemTags = ['data_structures', 'implementation', 'brute_force', 'math', 'dfs_and_similar', 'graphs', 'greedy', 'dp', 'binary_search', 'constructive_algorithms', 'sortings', 'strings', 'matrices', 'trees', 'dsu', 'number_theory', 'shortest_paths', 'two_pointers', 'bitmasks', 'combinatorics', 'fft', 'hashing', 'interactive', 'probabilities', 'divide_and_conquer', 'games', 'geometry', 'string_suffix_structures', 'meet-in-the-middle', 'ternary_search', 'flows', 'expression_parsing', '*special', 'graph_matchings', 'chinese_remainder_theorem', '2-sat', 'schedules']
+    
+    des__problem = ("Return information of problems having specified tags.\n"
+                    "Available tags are:\n")
+
+    for tag in problemTags: des__problem += tag + "  "
+
+    @commands.command(name='problem', brief='Codeforces problems query.', description=des__problem)
+    async def problemQuery(self, context, *tags):
+        if len(tags):
             query = ""
-            for auto in args[:len(args) - 1]: query += auto + ";"
-            query += args[len(args) - 1]
+            for tag in tags: 
+                for char in tag: 
+                    if char == "_": query += "+"
+                    else: query += char
+                query += ";"
             url = "https://codeforces.com/api/problemset.problems?tags="
+            # print(url+query)
             rawData = requests.get(url + query)
             jsonData = rawData.json()
             if jsonData['status'] == 'OK':
