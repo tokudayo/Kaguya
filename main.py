@@ -32,6 +32,7 @@ async def on_message(message):
 async def on_ready():
     bot.add_cog(GeneralPurpose(bot))
     bot.add_cog(CodeforcesCommand(bot))
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("Initialization completed.")
 
 
