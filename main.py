@@ -37,7 +37,5 @@ async def on_ready():
 
 # Run the bot
 load_dotenv()
-encryptedToken = os.getenv('DISCORD_TOKEN')
-TOKEN = ""
-for c in encryptedToken: TOKEN += chr(ord(c) + 1)
+TOKEN = os.getenv('DISCORD_TOKEN')
 bot.run(TOKEN)
