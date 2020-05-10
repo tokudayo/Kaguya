@@ -33,7 +33,7 @@ class CodeforcesUser:
             ratingData = rawData.json()['result']
             for auto in ratingData:
                 self.ratingChange.append((auto['ratingUpdateTimeSeconds'],auto['newRating']))
-            """
+            """ extend the rating data to current date.
             if len(ratingData):
                 self.ratingChange.append([int(datetime.timestamp(datetime.now())), ratingData[len(ratingData) - 1]['newRating']])
             """
@@ -93,7 +93,7 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
 
     des__info = "Codeforces user info look-up."
 
-    @commands.command(name='info', brief=des__info, description=des__info)
+    @commands.command(name='cfinfo', brief=des__info, description=des__info)
     async def printInfo(self, context, handle=""):
         if (handle):
             cfUser = CodeforcesUser(handle)
@@ -113,7 +113,7 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
 
     des__rating = "Draw a rating graph of Codeforces user(s)."
 
-    @commands.command(name='rating', brief=des__rating, description=des__rating)
+    @commands.command(name='cfrating', brief=des__rating, description=des__rating)
     async def ratingGraph(self, context, *users):
         if (len(users)):
             plt.figure()
@@ -142,7 +142,7 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
 
     des__load = "Load the lastest of Codeforces official problems database."
 
-    @commands.command(name='load', brief=des__load, description=des__load)
+    @commands.command(name='cfload', brief=des__load, description=des__load)
     async def problemUpdate(self, context):
         if self.loadProblems() == 'OK':
             await context.send(f"Data of {str(len(self.problems))} problems loaded.")
@@ -157,7 +157,7 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
 
     for tag in problemTags: des__problem += tag + "  "
 
-    @commands.command(name='problem', brief='Codeforces problems query.', description=des__problem)
+    @commands.command(name='cfproblem', brief='Codeforces problems query.', description=des__problem)
     async def problemQuery(self, context, *tags):
 
         def outputDump(entries):
