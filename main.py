@@ -5,7 +5,7 @@ from codeforces import CodeforcesCommand
 from general import GeneralPurpose
 
 
-bot = commands.Bot(command_prefix='!')
+bot = commands.Bot(command_prefix='!', case_insensitive=True, description='Hi. Kaguya is a bot. Check out what Kaguya can do!')
 
 
 @bot.event
