@@ -2,7 +2,8 @@ import requests, json, discord
 from datetime import datetime
 from discord.ext import commands
 from matplotlib import pyplot as plt
-import random
+from tabulate import tabulate
+import random, asyncio
 
 class CodeforcesUser:
 
@@ -48,11 +49,12 @@ class CodeforcesProblem:
     def __init__(self, data):
         self.contestId = ""
         self.index = ""
-        self.rating = -1
+        self.rating = 0
 
         self.name = data['name']
         self.tags = data['tags']
         if 'rating' in data: self.rating = data['rating']
+        if 'solvedCount' in data: self.solvedCount = data['solvedCount']
         if 'contestId' in data and 'index' in data:
             self.contestId = data['contestId']
             self.index = data['index']
@@ -157,13 +159,22 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
 
     @commands.command(name='problem', brief='Codeforces problems query.', description=des__problem)
     async def problemQuery(self, context, *tags):
+
+        def outputDump(entries):
+            responseData = []
+            for problem in entries:
+                responseData.append([problem.shortName, problem.name, problem.rating, problem.solvedCount])
+            responseData.sort(key=lambda x : x[2]) # Rating column
+            response = tabulate(responseData, headers=['ID', 'Problem name', 'Difficulty', 'Solved'], tablefmt='orgtbl')
+            return response
+
         if len(tags):
             query = []
             for auto in tags:
                 new = ""
                 for char in auto:
                     if char=="_": new += " "
-                    else: new += char
+                    else: new += char.lower()
                 query.append(new)
             query = set(query)
             entries = []
@@ -171,14 +182,59 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
                 if query.issubset(set(problem.tags)):
                     entries.append(problem)
             # to be fixed
-            response = "```"
-            random.seed()
-            choosen = random.choices(entries, k=min(10, len(entries)))
-            choosen = set(choosen)
-            for problem in choosen:
-                response += problem.name + '\n'
-            await context.send(f"Found {str(len(entries))} entries. Showing {str(len(choosen))} random entries:")
-            await context.send(response + "```")
+            if len(entries):
+                msg = await context.send(
+                    f"```Found {str(len(entries))} entries.\n"
+                    f"Filter by difficulty?```"
+                )
+                await msg.add_reaction('👍')
+                await msg.add_reaction('👎')
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=15.0, check=lambda reaction, user: user == context.author and (str(reaction.emoji) == '👍' or str(reaction.emoji) == '👎'))
+                except asyncio.TimeoutError:
+                    await context.send("Operation cancelled.")
+                else:
+                    if str(reaction.emoji) == '👍':
+                        await context.send('Enter difficulty range (e.g. 1700 2000)')
+                        try:
+                            msg = await self.bot.wait_for('message', timeout=15.0, check=lambda msg: msg.author == user)
+                        except asyncio.TimeoutError:
+                            await context.send('No?')
+                        else:
+                            msg = msg.content
+                            try:
+                                entriesByDif = []
+                                LO = int(msg.split()[0])
+                                HI = int(msg.split()[1])
+                                if (LO > HI): raise Exception("LO > HI")
+                            except:
+                                await context.send("Invalid range")
+                                return
+                            
+                            for problem in entries:
+                                if problem.rating and LO <= problem.rating <=  HI:
+                                    entriesByDif.append(problem)
+                            response = outputDump(entriesByDif)
+                            if len(response) < 1950:
+                                await context.send(f"Found {str(len(entriesByDif))} entries.\n" + "```" + response + "```")
+                            else:
+                                await context.send("Data length exceeds Discord limit. Dumping to text file.")
+                                f = open('output/problemQuery.txt','w+', encoding='utf-8')
+                                f.write(response)
+                                await context.send(file=discord.File('output/problemQuery.txt'))
+                    else:
+                        await context.send(f"No? Here is the list of {len(entries)} problems, sorted by difficulty.")
+                        response = outputDump(entries)
+                        if len(response) > 1950:
+                            f = open('output/problemQuery.txt','w+', encoding='utf-8')
+                            f.write(response)
+                            f.close()
+                            await context.send(file=discord.File('output/problemQuery.txt'))
+                        else:
+                            await context.send("```" + response + "```")
+
+            else:
+                await context.send("No entries found.")
 
         else:
             await context.send("Please specify the tag(s) of problems. Try `!problem [list of tags]`")
