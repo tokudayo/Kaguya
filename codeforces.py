@@ -57,6 +57,7 @@ class CodeforcesProblem:
             self.contestId = data['contestId']
             self.index = data['index']
             self.url = "https://codeforces.com/problemset/problem/" + str(self.contestId) + "/" + self.index
+            self.shortName = str(self.contestId) + self.index
         else:
             self.url = ""
 
@@ -131,8 +132,8 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
             plt.xticks(ticks = tick[0], labels=labels)
             if title == "Rating of ": title += "no one."
             plt.title(title)
-            plt.savefig('plot.png')
-            await context.send(file=discord.File('plot.png'))
+            plt.savefig('output/ratingPlot.png')
+            await context.send(file=discord.File('output/ratingPlot.png'))
         else:
             await context.send("Rating of whom? Try `!rating [list of user(s)]` <:pathetic:707148847817687100>")
 
