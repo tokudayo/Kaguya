@@ -3,7 +3,7 @@ from datetime import datetime
 from discord.ext import commands
 from matplotlib import pyplot as plt
 from tabulate import tabulate
-import random, asyncio
+import random, asyncio, os
 
 class CodeforcesUser:
 
@@ -71,7 +71,10 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
     def __init__(self, bot):
         self.bot = bot
         self.loadProblems()
-
+        try:
+            os.mkdir('cf__output')
+        except:
+            pass
 
     def loadProblems(self):
         self.problems = []
@@ -134,8 +137,8 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
             plt.xticks(ticks = tick[0], labels=labels)
             if title == "Rating of ": title += "no one."
             plt.title(title)
-            plt.savefig('output/ratingPlot.png')
-            await context.send(file=discord.File('output/ratingPlot.png'))
+            plt.savefig('cf__output/ratingPlot.png')
+            await context.send(file=discord.File('cf__output/ratingPlot.png'))
         else:
             await context.send("Rating of whom? Try `!rating [list of user(s)]` <:pathetic:707148847817687100>")
 
@@ -219,17 +222,17 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
                                 await context.send(f"Found {str(len(entriesByDif))} entries.\n" + "```" + response + "```")
                             else:
                                 await context.send("Data length exceeds Discord limit. Dumping to text file.")
-                                f = open('output/problemQuery.txt','w+', encoding='utf-8')
+                                f = open('cf__output/problemQuery.txt','w+', encoding='utf-8')
                                 f.write(response)
-                                await context.send(file=discord.File('output/problemQuery.txt'))
+                                await context.send(file=discord.File('cf__output/problemQuery.txt'))
                     else:
                         await context.send(f"No? Here is the list of {len(entries)} problems, sorted by difficulty.")
                         response = outputDump(entries)
                         if len(response) > 1950:
-                            f = open('output/problemQuery.txt','w+', encoding='utf-8')
+                            f = open('cf__output/problemQuery.txt','w+', encoding='utf-8')
                             f.write(response)
                             f.close()
-                            await context.send(file=discord.File('output/problemQuery.txt'))
+                            await context.send(file=discord.File('cf__output/problemQuery.txt'))
                         else:
                             await context.send("```" + response + "```")
 
