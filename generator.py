@@ -47,6 +47,9 @@ class GeneratorCommands(commands.Cog, name='Generator Commands'):
         except:
             await context.send("Invalid number of vertices.")
         
+        if V >= 50000:
+            await context.send("Sorry, but it would take longer than you can ever wait. Queue cancelled.")
+            return
         random.seed()
         prufer = [random.randint(1, V - 2) for x in range(V)]
         response = printTreeEdges(prufer, V - 2)
