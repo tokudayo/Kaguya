@@ -186,54 +186,50 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
                     entries.append(problem)
             # to be fixed
             if len(entries):
-                msg = await context.send(
+                msg = (
                     f"```Found {str(len(entries))} entries.\n"
                     f"Filter by difficulty?```"
                 )
-                await msg.add_reaction('👍')
-                await msg.add_reaction('👎')
-                try:
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=15.0, check=lambda reaction, user: user == context.author and (str(reaction.emoji) == '👍' or str(reaction.emoji) == '👎'))
-                except asyncio.TimeoutError:
+                userReact = await utils.yesnoReact(context, msg)
+                if userReact == "TIMEOUT":
                     await context.send("Operation cancelled.")
-                else:
-                    if str(reaction.emoji) == '👍':
-                        await context.send('Enter difficulty range (e.g. 1700 2000)')
-                        try:
-                            msg = await self.bot.wait_for('message', timeout=15.0, check=lambda msg: msg.author == user)
-                        except asyncio.TimeoutError:
-                            await context.send('No?')
-                        else:
-                            msg = msg.content
-                            try:
-                                entriesByDif = []
-                                LO = int(msg.split()[0])
-                                HI = int(msg.split()[1])
-                                if (LO > HI): raise Exception("LO > HI")
-                            except:
-                                await context.send("Invalid range")
-                                return
-                            
-                            for problem in entries:
-                                if problem.rating and LO <= problem.rating <=  HI:
-                                    entriesByDif.append(problem)
-                            response = outputDump(entriesByDif)
-                            if len(response) < 1950:
-                                await context.send(f"Found {str(len(entriesByDif))} entries.\n" + "```" + response + "```")
-                            else:
-                                await context.send("Data length exceeds Discord limit. Dumping to text file.")
-                                PATH = 'output/problemQuery.txt'
-                                utils.dumpToFile(path= PATH, response=response)
-                                await context.send(file=discord.File(PATH))
+                elif str(userReact['reaction'].emoji) == '👍':
+                    await context.send('Enter difficulty range (e.g. 1700 2000)')
+                    try:
+                        msg = await self.bot.wait_for('message', timeout=15.0, check=lambda msg: msg.author == userReact['user'])
+                    except asyncio.TimeoutError:
+                        await context.send('No?')
                     else:
-                        await context.send(f"No? Here is the list of {len(entries)} problems, sorted by difficulty.")
-                        response = outputDump(entries)
-                        if len(response) > 1950:
+                        msg = msg.content
+                        try:
+                            entriesByDif = []
+                            LO = int(msg.split()[0])
+                            HI = int(msg.split()[1])
+                            if (LO > HI): raise Exception("LO > HI")
+                        except:
+                            await context.send("Invalid range")
+                            return
+                        
+                        for problem in entries:
+                            if problem.rating and LO <= problem.rating <=  HI:
+                                entriesByDif.append(problem)
+                        response = outputDump(entriesByDif)
+                        if len(response) < 1950:
+                            await context.send(f"Found {str(len(entriesByDif))} entries.\n" + "```" + response + "```")
+                        else:
+                            await context.send("Data length exceeds Discord limit. Dumping to text file.")
                             PATH = 'output/problemQuery.txt'
                             utils.dumpToFile(path= PATH, response=response)
                             await context.send(file=discord.File(PATH))
-                        else:
-                            await context.send("```" + response + "```")
+                else:
+                    await context.send(f"No? Here is the list of {len(entries)} problems, sorted by difficulty.")
+                    response = outputDump(entries)
+                    if len(response) > 1950:
+                        PATH = 'output/problemQuery.txt'
+                        utils.dumpToFile(path= PATH, response=response)
+                        await context.send(file=discord.File(PATH))
+                    else:
+                        await context.send("```" + response + "```")
 
             else:
                 await context.send("No entries found.")
