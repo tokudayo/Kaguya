@@ -1,4 +1,5 @@
 import os, discord, random, asyncio
+import output
 from discord.ext import commands
 
 class GeneratorCommands(commands.Cog, name='Generator Commands'):
@@ -40,4 +41,9 @@ class GeneratorCommands(commands.Cog, name='Generator Commands'):
         random.seed()
         prufer = [random.randint(1, V) for x in range(V)]
         response = printTreeEdges(prufer, V)
-        
+        if len(response) > 1990:
+            PATH = 'output/genTree.txt'
+            output.dumpToFile(path=PATH, response=response)
+            await context.send(file=discord.File(PATH))
+        else:
+            await context.send("```" + response + "```")
