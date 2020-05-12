@@ -224,6 +224,7 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
                                 await context.send("Data length exceeds Discord limit. Dumping to text file.")
                                 f = open('cf__output/problemQuery.txt','w+', encoding='utf-8')
                                 f.write(response)
+                                f.close()
                                 await context.send(file=discord.File('cf__output/problemQuery.txt'))
                     else:
                         await context.send(f"No? Here is the list of {len(entries)} problems, sorted by difficulty.")
