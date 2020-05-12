@@ -1,5 +1,5 @@
 import os, discord, random, asyncio
-import output
+import utils
 from discord.ext import commands
 
 class GeneratorCommands(commands.Cog, name='Generator Commands'):
@@ -13,7 +13,7 @@ class GeneratorCommands(commands.Cog, name='Generator Commands'):
             pass
 
 
-    des__tree = "Generate a random tree containing V vertices from a random Prufer sequence. N should be smaller than 10000."
+    des__tree = ("Generate a random tree containing V vertices from a random Prufer sequence. N should be smaller than 10000.\n")
 
     @commands.command(name='gentree', brief="Generate a random tree containing V vertices.", description=des__tree)
     async def genTree(self, context, V):
@@ -58,7 +58,14 @@ class GeneratorCommands(commands.Cog, name='Generator Commands'):
         response = printTreeEdges(prufer, V - 2)
         if len(response) > 1990:
             PATH = 'output/genTree.txt'
-            output.dumpToFile(path=PATH, response=response)
+            utils.dumpToFile(path=PATH, response=response)
             await context.send(file=discord.File(PATH))
         else:
             await context.send("```" + response + "```")
+
+
+    des__array = "Generate an array of fixed length N. Elements range [L;R] can be specified. Array elements can be choosen to be distinct."
+
+    @commands.command(name='genarray', brief='Generate an array of fixed length.', description=des__array)
+    async def genArray(self, context, length, L = 0, R = 1000000000, distinct=False):
+        pass

@@ -1,5 +1,5 @@
 import requests, json, discord, random, asyncio, os
-import output
+import utils
 from datetime import datetime
 from discord.ext import commands
 from matplotlib import pyplot as plt
@@ -223,14 +223,14 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
                             else:
                                 await context.send("Data length exceeds Discord limit. Dumping to text file.")
                                 PATH = 'output/problemQuery.txt'
-                                output.dumpToFile(path= PATH, response=response)
+                                utils.dumpToFile(path= PATH, response=response)
                                 await context.send(file=discord.File(PATH))
                     else:
                         await context.send(f"No? Here is the list of {len(entries)} problems, sorted by difficulty.")
                         response = outputDump(entries)
                         if len(response) > 1950:
                             PATH = 'output/problemQuery.txt'
-                            output.dumpToFile(path= PATH, response=response)
+                            utils.dumpToFile(path= PATH, response=response)
                             await context.send(file=discord.File(PATH))
                         else:
                             await context.send("```" + response + "```")
