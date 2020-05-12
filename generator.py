@@ -7,6 +7,10 @@ class GeneratorCommands(commands.Cog, name='Generator Commands'):
 
     def __init__(self, bot):
         self.bot = bot
+        try:
+            os.mkdir('output')
+        except:
+            pass
 
 
     des__tree = "Generate a random tree containing V vertices"
@@ -25,7 +29,7 @@ class GeneratorCommands(commands.Cog, name='Generator Commands'):
                 for j in range(vertices): 
                     if (vertex_set[j] == 0): 
                         vertex_set[j] = -1
-                        temp += str(j + 1) + " " + prufer[i] + "\n" 
+                        temp += str(j + 1) + " " + str(prufer[i]) + "\n" 
                         vertex_set[prufer[i] - 1] -= 1
                         break
             
@@ -38,9 +42,13 @@ class GeneratorCommands(commands.Cog, name='Generator Commands'):
                     temp += str(i + 1)
             return temp
 
+        try:
+            V = int(V)
+        except:
+            await context.send("Invalid number of vertices.")
         random.seed()
-        prufer = [random.randint(1, V) for x in range(V)]
-        response = printTreeEdges(prufer, V)
+        prufer = [random.randint(1, V - 2) for x in range(V)]
+        response = printTreeEdges(prufer, V - 2)
         if len(response) > 1990:
             PATH = 'output/genTree.txt'
             output.dumpToFile(path=PATH, response=response)
