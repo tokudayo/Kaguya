@@ -3,6 +3,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from codeforces import CodeforcesCommand
 from general import GeneralPurpose
+from generator import GeneratorCommands
 
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True, description='Hi. Kaguya is a bot. Check out what Kaguya can do!')
@@ -32,6 +33,7 @@ async def on_message(message):
 async def on_ready():
     bot.add_cog(GeneralPurpose(bot))
     bot.add_cog(CodeforcesCommand(bot))
+    bot.add_cog(GeneratorCommands(bot))
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("Initialization completed.")
 
