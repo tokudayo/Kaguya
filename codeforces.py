@@ -72,7 +72,7 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
         self.bot = bot
         self.loadProblems()
         try:
-            os.mkdir('cf__output')
+            os.mkdir('output')
         except:
             pass
 
