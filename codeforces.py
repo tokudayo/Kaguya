@@ -223,14 +223,14 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
                                 await context.send(f"Found {str(len(entriesByDif))} entries.\n" + "```" + response + "```")
                             else:
                                 await context.send("Data length exceeds Discord limit. Dumping to text file.")
-                                PATH = 'cf__output/problemQuery.txt'
+                                PATH = 'output/problemQuery.txt'
                                 output.dumpToFile(path= PATH, response=response)
                                 await context.send(file=discord.File(PATH))
                     else:
                         await context.send(f"No? Here is the list of {len(entries)} problems, sorted by difficulty.")
                         response = outputDump(entries)
                         if len(response) > 1950:
-                            PATH = 'cf__output/problemQuery.txt'
+                            PATH = 'output/problemQuery.txt'
                             output.dumpToFile(path= PATH, response=response)
                             await context.send(file=discord.File(PATH))
                         else:
