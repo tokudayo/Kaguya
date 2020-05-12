@@ -1,10 +1,9 @@
-import requests, json, discord
+import requests, json, discord, random, asyncio, os
+import output
 from datetime import datetime
 from discord.ext import commands
 from matplotlib import pyplot as plt
 from tabulate import tabulate
-import random, asyncio, os
-import output
 
 class CodeforcesUser:
 
