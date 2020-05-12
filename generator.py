@@ -13,7 +13,7 @@ class GeneratorCommands(commands.Cog, name='Generator Commands'):
             pass
 
 
-    des__tree = "Generate a random tree containing V vertices"
+    des__tree = "Generate a random tree containing V vertices from a random Prufer sequence. N should be smaller than 10000."
 
     @commands.command(name='gentree', brief=des__tree, description=des__tree)
     async def genTree(self, context, V):
@@ -46,6 +46,7 @@ class GeneratorCommands(commands.Cog, name='Generator Commands'):
             V = int(V)
         except:
             await context.send("Invalid number of vertices.")
+        
         random.seed()
         prufer = [random.randint(1, V - 2) for x in range(V)]
         response = printTreeEdges(prufer, V - 2)
