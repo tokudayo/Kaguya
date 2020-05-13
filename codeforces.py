@@ -137,8 +137,8 @@ class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
             plt.xticks(ticks = tick[0], labels=labels)
             if title == "Rating of ": title += "no one."
             plt.title(title)
-            plt.savefig('cf__output/ratingPlot.png')
-            await context.send(file=discord.File('cf__output/ratingPlot.png'))
+            plt.savefig('output/ratingPlot.png')
+            await context.send(file=discord.File('output/ratingPlot.png'))
         else:
             await context.send("Rating of whom? Try `!rating [list of user(s)]` <:pathetic:707148847817687100>")
 
