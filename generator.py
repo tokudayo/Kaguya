@@ -68,4 +68,23 @@ class GeneratorCommands(commands.Cog, name='Generator Commands'):
 
     @commands.command(name='genarray', brief='Generate an array of fixed length.', description=des__array)
     async def genArray(self, context, length, L = 0, R = 1000000000, distinct=False):
-        pass
+        length = int(length)
+        L = int(L)
+        R = int(R)
+        random.seed()
+        response = ""
+        for _ in range(length):
+             response += str(random.randint(L,R)) + " "
+        if len(response) > 1975:
+            utils.dumpToFile(response=response,path='output/randomArray.txt')
+            await context.send(file=discord.File('output/randomArray.txt'))
+        else:
+            await context.send(response)
+
+
+    des__rand = "Generate a random number between 1 and 100."
+
+    @commands.command(name='roll', brief=des__rand, description=des__rand)
+    async def randomNum(self, context):
+        random.seed()
+        await context.send(str(random.randint(1,100)))
