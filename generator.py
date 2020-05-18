@@ -67,7 +67,7 @@ class GeneratorCommands(commands.Cog, name='Generator Commands'):
     des__array = "Generate an array of fixed length N. Elements range [L;R] can be specified. Array elements can be choosen to be distinct."
 
     @commands.command(name='genarray', brief='Generate an array of fixed length.', description=des__array)
-    async def genArray(self, context, length, L = 0, R = 1000000000, distinct=False):
+    async def genArray(self, context, length, L = 0, R = 1000000000):
         length = int(length)
         L = int(L)
         R = int(R)
@@ -81,3 +81,21 @@ class GeneratorCommands(commands.Cog, name='Generator Commands'):
         else:
             await context.send(response)
 
+
+    des__perm = "Generate a permutation of N first positive integers."
+
+    @commands.command(name='genperm', brief=des__perm, description=des__perm)
+    async def genPerm(self, context, limit):
+        limit = int(limit)
+        random.seed()
+        arr = []
+        for posInt in range(limit): arr.append(posInt + 1)
+        random.shuffle(arr)
+        response = ""
+        for elem in arr:
+             response += str(elem) + " "
+        if len(response) > 1975:
+            utils.dumpToFile(response=response,path='output/randomArray.txt')
+            await context.send(file=discord.File('output/randomArray.txt'))
+        else:
+            await context.send(response)
