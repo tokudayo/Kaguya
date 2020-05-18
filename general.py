@@ -1,4 +1,4 @@
-import discord
+import discord,  random
 from discord.ext import commands
 from webster import Word
 from wiki import WikiPage
@@ -79,3 +79,11 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
             await context.send(embed=embed)
         else:
             await context.send("Missing one obvious argument: `!wiki [topic]` <:pathetic:707148847817687100>")
+
+
+    des__rand = "Generate a random number between 1 and 100."
+
+    @commands.command(name='roll', brief=des__rand, description=des__rand)
+    async def randomNum(self, context):
+        random.seed()
+        await context.send(str(random.randint(1,100)))

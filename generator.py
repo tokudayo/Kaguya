@@ -81,10 +81,3 @@ class GeneratorCommands(commands.Cog, name='Generator Commands'):
         else:
             await context.send(response)
 
-
-    des__rand = "Generate a random number between 1 and 100."
-
-    @commands.command(name='roll', brief=des__rand, description=des__rand)
-    async def randomNum(self, context):
-        random.seed()
-        await context.send(str(random.randint(1,100)))
