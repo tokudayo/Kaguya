@@ -65,7 +65,7 @@ class CodeforcesProblem:
 
 
 
-class CodeforcesCommand(commands.Cog, name='Codeforces Commands'):
+class CodeforcesCommands(commands.Cog, name='Codeforces Commands'):
 
 
     def __init__(self, bot):

@@ -1,7 +1,7 @@
 import os, discord
 from discord.ext import commands
 from dotenv import load_dotenv
-from codeforces import CodeforcesCommand
+from codeforces import CodeforcesCommands
 from general import GeneralPurpose
 from generator import GeneratorCommands
 
@@ -32,7 +32,7 @@ async def on_message(message):
 @bot.event
 async def on_ready():
     bot.add_cog(GeneralPurpose(bot))
-    bot.add_cog(CodeforcesCommand(bot))
+    bot.add_cog(CodeforcesCommands(bot))
     bot.add_cog(GeneratorCommands(bot))
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("Initialization completed.")
