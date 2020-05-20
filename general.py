@@ -1,4 +1,4 @@
-import discord,  random
+import discord, random, asyncio, utils
 from discord.ext import commands
 from webster import Word
 from wiki import WikiPage
@@ -87,3 +87,31 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
     async def randomNum(self, context):
         random.seed()
         await context.send(str(random.randint(1,100)))
+
+
+    des__migrate = "Migrate all message history from one channel to another."
+
+    @commands.command(name='migrate', brief=des__migrate, description=des__migrate)
+    async def migrate(self, context):
+        await context.send("Please send `!here` to target channel.")
+        try:
+            msg = await self.bot.wait_for('message', timeout=15.0, check=lambda msg: msg.author == context.author and msg.content.lower() == '!here')
+        except asyncio.TimeoutError:
+            await context.send('Operation aborted')
+        else:
+            channelMsg = []
+            async for message in context.history(limit=999):
+                channelMsg.append("`" + message.author.name + ":`\n" + message.content)
+            for index in range(len(channelMsg) - 1, -1, -1):
+                await msg.channel.send(channelMsg[index])
+            
+        '''    
+        try:
+            msg = await self.bot.wait_for('message', timeout=15.0, check=lambda msg: msg.author == context.author)
+            
+        except asyncio.TimeoutError:
+            await context.send('No?')
+        else:
+            pass
+
+        '''
