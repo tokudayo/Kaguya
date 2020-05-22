@@ -105,13 +105,27 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
             for index in range(len(channelMsg) - 1, -1, -1):
                 await msg.channel.send(channelMsg[index])
             
-        '''    
-        try:
-            msg = await self.bot.wait_for('message', timeout=15.0, check=lambda msg: msg.author == context.author)
-            
-        except asyncio.TimeoutError:
-            await context.send('No?')
-        else:
-            pass
 
+    des__emoji = "Get all emojis of the current server."
+
+    @commands.command(name='getemojis', brief=des__emoji, description=des__emoji)
+    async def getEmojis(self, context):
+        emojis = context.guild.emojis
         '''
+        for emoji in emojis:
+            link = emoji.url
+            print(link)
+            '''
+        await context.send("Please send `!here` to target guild.")
+        try:
+            msg = await self.bot.wait_for('message', timeout=15.0, check=lambda msg: msg.author == context.author and msg.content.lower() == '!here')
+        except asyncio.TimeoutError:
+            await context.send('Operation aborted')
+        else:
+            targetServer = msg.guild
+            targetServerEmojis = [emoji.name for emoji in targetServer.emojis]
+            print(targetServerEmojis)
+            for emoji in emojis:
+                if emoji.name not in targetServerEmojis:
+                    emote = await emoji.url.read()
+                    await targetServer.create_custom_emoji(name=emoji.name, image=emote)
