@@ -2,6 +2,7 @@ import discord, asyncio, os
 import utils
 from datetime import datetime
 from discord.ext import commands
+from discord.errors import HTTPException
 
 class AdminCommands(commands.Cog, name='Admin Commands'):
 
@@ -39,11 +40,15 @@ class AdminCommands(commands.Cog, name='Admin Commands'):
             await context.send('Operation aborted')
         else:
             targetServer = msg.guild
-            targetServerEmojis = [emoji.name for emoji in targetServer.emojis]
+            targetServerEmojis = [emoji.name.lower() for emoji in targetServer.emojis]
             newEmojis = 0
             for emoji in emojis:
-                if emoji.name not in targetServerEmojis:
-                    emote = await emoji.url.read()
-                    await targetServer.create_custom_emoji(name=emoji.name, image=emote)
-                    newEmojis += 1
-            await context.send(str(newEmojis) + " new emojis added to this server from " + context.guild.name + " server.")
+                if emoji.name.lower() not in targetServerEmojis:
+                    try:
+                        emote = await emoji.url.read()
+                        await targetServer.create_custom_emoji(name=emoji.name, image=emote)
+                        newEmojis += 1
+                    except:
+                        await msg.channel.send(str(newEmojis) + " new emojis added to this server from " + context.guild.name + " server. The server has reached its custom emoji limit.")
+                        return
+            await msg.channel.send(str(newEmojis) + " new emojis added to this server from " + context.guild.name + " server.")
