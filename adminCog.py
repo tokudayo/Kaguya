@@ -27,9 +27,9 @@ class AdminCommands(commands.Cog, name='Admin Commands'):
                 await msg.channel.send(channelMsg[index])
             
 
-    des__emoji = "Migrate all emojis of the current server to another."
+    des__emoji = "Copy all emojis of the current server to another."
 
-    @commands.command(name='getemojis', brief=des__emoji, description=des__emoji)
+    @commands.command(name='copyemojis', brief=des__emoji, description=des__emoji)
     async def getEmojis(self, context):
         emojis = context.guild.emojis
         await context.send("Please send `!here` to target guild.")
@@ -40,8 +40,10 @@ class AdminCommands(commands.Cog, name='Admin Commands'):
         else:
             targetServer = msg.guild
             targetServerEmojis = [emoji.name for emoji in targetServer.emojis]
-            print(targetServerEmojis)
+            newEmojis = 0
             for emoji in emojis:
                 if emoji.name not in targetServerEmojis:
                     emote = await emoji.url.read()
                     await targetServer.create_custom_emoji(name=emoji.name, image=emote)
+                    newEmojis += 1
+            await context.send(str(newEmojis) + " new emojis added to this server from " + context.guild.name + " server.")
