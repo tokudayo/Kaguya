@@ -1,9 +1,9 @@
 import os, discord
 from discord.ext import commands
 from dotenv import load_dotenv
-from codeforces import CodeforcesCommands
-from general import GeneralPurpose
-from generator import GeneratorCommands
+from codeforcesCog import CodeforcesCommands
+from generalCog import GeneralPurpose
+from generatorCog import GeneratorCommands
 
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True, description='Hi. Kaguya is a bot. Check out what Kaguya can do!')
