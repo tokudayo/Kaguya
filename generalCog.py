@@ -87,3 +87,20 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
     async def randomNum(self, context):
         random.seed()
         await context.send(str(random.randint(1,100)))
+
+
+    des__calc = "Calculate a simple arithmetic expression."
+
+    @commands.command(name='calc', brief=des__calc, description=des__calc)
+    async def calc(self, context, *args):
+        check = True
+        expression = ""
+        for auto in args:
+            expression += auto
+        for auto in expression:
+            if 'a' < auto < 'z':
+                check = False
+                break
+        if check:
+            response = str(eval(expression))
+            await context.send(response)
