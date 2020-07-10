@@ -9,7 +9,23 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
 
     def __init__(self, bot):
         self.bot = bot
+        loadResponse()
     
+    def loadResponse(self):
+        self.response = []
+        res = open("data/insults.txt","r+", encoding="utf-8")
+        data = res.readLines()
+        trigger = True
+        res = []
+        for line in data:
+            if trigger:
+                res = [line]
+                trigger = False
+            else:
+                res.append(line)
+                self.response.append(res)
+                trigger = True
+
 
     @commands.command(name='insult', help='Roasts a random dude or a specific person.', aliases=['roast'])
     async def insult(self, context, *args):
@@ -104,3 +120,27 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
         if check:
             response = str(eval(expression))
             await context.send(response)
+
+
+    des__learn = "Teach me to response to a certain phrase."
+
+    @commands.command(name='learn', brief=des__learn, description=des__learn)
+    async def learnResponse(self, context, *args):
+        trigger = ""
+        response = ""
+        await context.send("What phrase do you want me to response to?")
+        try:
+            msg = await self.bot.wait_for('message', timeout=15.0, check=lambda msg: msg.author == context.message.author)
+        except asyncio.TimeoutError:
+            await context.send('No?')
+        else:
+            trigger = msg.content
+            await context.send("What should i response to that?")
+            try:
+                msg = await self.bot.wait_for('message', timeout=15.0, check=lambda msg: msg.author == context.message.author)
+            except asyncio.TimeoutError:
+                await context.send('No?')
+            else:
+                response = msg.content
+        if trigger != "" and response != "":
+            this.response.append([trigger, response])
