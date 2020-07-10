@@ -121,7 +121,7 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
             response = str(eval(expression))
             await context.send(response)
 
-
+    '''
     des__learn = "Teach me to response to a certain phrase."
 
     @commands.command(name='learn', brief=des__learn, description=des__learn)
@@ -143,4 +143,5 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
             else:
                 response = msg.content
         if trigger != "" and response != "":
-            this.response.append([trigger, response])
+            this.response.append([trigger, response])\
+    '''
