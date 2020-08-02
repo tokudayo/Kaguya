@@ -6,15 +6,11 @@ from random import choice
 
 class GeneralPurpose(commands.Cog, name='General Commands'):
     
-
-    def __init__(self, bot):
-        self.bot = bot
-        loadResponse()
     
     def loadResponse(self):
         self.response = []
         res = open("data/insults.txt","r+", encoding="utf-8")
-        data = res.readLines()
+        data = res.readline()
         trigger = True
         res = []
         for line in data:
@@ -25,6 +21,11 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
                 res.append(line)
                 self.response.append(res)
                 trigger = True
+
+    
+    def __init__(self, bot):
+        self.bot = bot
+        self.loadResponse()
 
 
     @commands.command(name='insult', help='Roasts a random dude or a specific person.', aliases=['roast'])
