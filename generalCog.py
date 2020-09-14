@@ -146,3 +146,32 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
         if trigger != "" and response != "":
             this.response.append([trigger, response])\
     '''
+
+    des__j = "J"
+
+    @commands.command(name='j', brief=des__j, description=des__j)
+    async def getEmojis(self, context):
+        hiragana = "あいうえおかきくけこさしすせそたちつてと"
+        trans = ["a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "shi", "su", "se", "so",
+                 "ta", "chi", "tsu", "te", "to"]
+        lim = len(trans)
+        wordLen = random.randint(1, 5)
+        quest = ""
+        ans = ""
+        possible = range(lim)
+        for _ in range(wordLen):
+            word = random.choice(possible)
+            quest += hiragana[word]
+            ans += trans[word]
+
+
+        await context.send(quest)
+        try:
+            msg = await self.bot.wait_for('message', timeout=10.0, check=lambda msg: msg.author == context.author)
+        except asyncio.TimeoutError:
+            await context.send('Cham qua ' + ans)
+        else:
+            if (msg.content.strip() == ans):
+                await context.send('OK')
+            else:
+                await context.send('Sai roi phai la ' + ans)
