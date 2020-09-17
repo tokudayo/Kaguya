@@ -154,15 +154,45 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
         hiragana = "あいうえおかきくけこさしすせそたちつてと"
         trans = ["a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "shi", "su", "se", "so",
                  "ta", "chi", "tsu", "te", "to"]
-        lim = len(trans)
+        hiragana2 = "なにぬねのはひふへほまみむめもやゆよらりるれろわを"
+        n = "ん"
+        
+        trans2 = ['na',
+                'ni',
+                'nu',
+                'ne',
+                'no',
+                'ha',
+                'hi',
+                'fu',
+                'he',
+                'ho',
+                'ma',
+                'mi',
+                'mu',
+                'me',
+                'mo',
+                'ya',
+                'yu',
+                'yo',
+                'ra',
+                'ri',
+                'ru',
+                're',
+                'ro',
+                'wa',
+                'wo'
+        ]
+
+        lim = len(trans2)
         wordLen = random.randint(1, 5)
         quest = ""
         ans = ""
         possible = range(lim)
         for _ in range(wordLen):
             word = random.choice(possible)
-            quest += hiragana[word]
-            ans += trans[word]
+            quest += hiragana2[word]
+            ans += trans2[word]
 
 
         await context.send(quest)
