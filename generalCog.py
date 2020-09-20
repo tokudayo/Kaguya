@@ -184,15 +184,18 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
                 'wo'
         ]
 
-        lim = len(trans2)
+        trans = trans + trans2
+        hiragana = hiragana + hiragana2
+
+        lim = len(trans)
         wordLen = random.randint(1, 5)
         quest = ""
         ans = ""
         possible = range(lim)
         for _ in range(wordLen):
             word = random.choice(possible)
-            quest += hiragana2[word]
-            ans += trans2[word]
+            quest += hiragana[word]
+            ans += trans[word]
 
 
         await context.send(quest)
