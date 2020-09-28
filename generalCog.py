@@ -208,3 +208,64 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
                 await context.send('OK')
             else:
                 await context.send('Sai roi phai la ' + ans)
+
+
+    @commands.command(name='h', brief=des__j, description=des__j)
+    async def sadf(self, context):
+        hiragana = "アイウエオカキクケコサシスセソタチツテト"
+        trans = ["a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "shi", "su", "se", "so",
+                 "ta", "chi", "tsu", "te", "to"]
+        hiragana2 = "なにぬねのはひふへほまみむめもやゆよらりるれろわを"
+        n = "ん"
+        
+        trans2 = ['na',
+                'ni',
+                'nu',
+                'ne',
+                'no',
+                'ha',
+                'hi',
+                'fu',
+                'he',
+                'ho',
+                'ma',
+                'mi',
+                'mu',
+                'me',
+                'mo',
+                'ya',
+                'yu',
+                'yo',
+                'ra',
+                'ri',
+                'ru',
+                're',
+                'ro',
+                'wa',
+                'wo'
+        ]
+        '''
+        trans = trans + trans2
+        hiragana = hiragana + hiragana2
+        '''
+        lim = len(trans)
+        wordLen = random.randint(1, 5)
+        quest = ""
+        ans = ""
+        possible = range(lim)
+        for _ in range(wordLen):
+            word = random.choice(possible)
+            quest += hiragana[word]
+            ans += trans[word]
+
+
+        await context.send(quest)
+        try:
+            msg = await self.bot.wait_for('message', timeout=10.0, check=lambda msg: msg.author == context.author)
+        except asyncio.TimeoutError:
+            await context.send('Cham qua ' + ans)
+        else:
+            if (msg.content.strip() == ans):
+                await context.send('OK')
+            else:
+                await context.send('Sai roi phai la ' + ans)
