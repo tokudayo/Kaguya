@@ -149,7 +149,7 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
 
     des__j = "J"
 
-    @commands.command(name='j', brief=des__j, description=des__j)
+    @commands.command(name='h', brief=des__j, description=des__j)
     async def getEmojis(self, context):
         hiragana = "あいうえおかきくけこさしすせそたちつてと"
         trans = ["a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "shi", "su", "se", "so",
@@ -210,13 +210,13 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
                 await context.send('Sai roi phai la ' + ans)
 
 
-    @commands.command(name='h', brief=des__j, description=des__j)
+    @commands.command(name='k', brief=des__j, description=des__j)
     async def sadf(self, context):
         hiragana = "アイウエオカキクケコサシスセソタチツテト"
         trans = ["a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "shi", "su", "se", "so",
                  "ta", "chi", "tsu", "te", "to"]
-        hiragana2 = "なにぬねのはひふへほまみむめもやゆよらりるれろわを"
-        n = "ん"
+        hiragana2 = "ナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲ"
+        n = "ン"
         
         trans2 = ['na',
                 'ni',
@@ -244,10 +244,10 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
                 'wa',
                 'wo'
         ]
-        '''
+        
         trans = trans + trans2
         hiragana = hiragana + hiragana2
-        '''
+        
         lim = len(trans)
         wordLen = random.randint(1, 5)
         quest = ""
