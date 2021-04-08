@@ -150,64 +150,32 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
     des__j = "J"
 
     @commands.command(name='h', brief=des__j, description=des__j)
-    async def getEmojis(self, context):
-        hiragana = "あいうえおかきくけこさしすせそたちつてと"
-        trans = ["a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "shi", "su", "se", "so",
-                 "ta", "chi", "tsu", "te", "to"]
-        hiragana2 = "なにぬねのはひふへほまみむめもやゆよらりるれろわを"
-        n = "ん"
-        
-        trans2 = ['na',
-                'ni',
-                'nu',
-                'ne',
-                'no',
-                'ha',
-                'hi',
-                'fu',
-                'he',
-                'ho',
-                'ma',
-                'mi',
-                'mu',
-                'me',
-                'mo',
-                'ya',
-                'yu',
-                'yo',
-                'ra',
-                'ri',
-                'ru',
-                're',
-                'ro',
-                'wa',
-                'wo'
-        ]
+    async def hiraganaPrac(self, context):
+        hiragana = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわを"
+        romaji = ["a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "shi", "su", "se", "so",
+                 "ta", "chi", "tsu", "te", "to",'na',  'ni', 'nu', 'ne', 'no', 'ha', 'hi', 'fu', 'he',
+                 'ho', 'ma', 'mi', 'mu', 'me', 'mo', 'ya', 'yu', 'yo', 'ra', 'ri', 'ru', 're', 'ro',
+                 'wa', 'wo']
 
-        trans = trans + trans2
-        hiragana = hiragana + hiragana2
-
-        lim = len(trans)
         wordLen = random.randint(1, 5)
         quest = ""
         ans = ""
-        possible = range(lim)
         for _ in range(wordLen):
-            word = random.choice(possible)
-            quest += hiragana[word]
-            ans += trans[word]
+            letterIndex = random.choice(range(len(romaji)))
+            quest += hiragana[letterIndex]
+            ans += romaji[letterIndex]
 
 
         await context.send(quest)
         try:
             msg = await self.bot.wait_for('message', timeout=10.0, check=lambda msg: msg.author == context.author)
         except asyncio.TimeoutError:
-            await context.send('Cham qua ' + ans)
+            await context.send('The answer is: ' + ans)
         else:
-            if (msg.content.strip() == ans):
-                await context.send('OK')
+            if (msg.content.strip().lower() == ans):
+                await context.send('Correct.')
             else:
-                await context.send('Sai roi phai la ' + ans)
+                await context.send('Wrong answer.\nCorrect answer: ' + ans)
 
 
     @commands.command(name='k', brief=des__j, description=des__j)
