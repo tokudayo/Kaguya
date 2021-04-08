@@ -147,22 +147,30 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
             this.response.append([trigger, response])\
     '''
 
-    des__j = "J"
+    des__jap = "Hiragana/Katakana to Romaji translation practice."
 
-    @commands.command(name='h', brief=des__j, description=des__j)
-    async def hiraganaPrac(self, context):
+    @commands.command(name='jprac', brief=des__jap, description=des__jap)
+    async def japanesePrac(self, context, *args):
         hiragana = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわを"
+        katakana = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲ"
         romaji = ["a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "shi", "su", "se", "so",
-                 "ta", "chi", "tsu", "te", "to",'na',  'ni', 'nu', 'ne', 'no', 'ha', 'hi', 'fu', 'he',
+                 "ta", "chi", "tsu", "te", "to", 'na',  'ni', 'nu', 'ne', 'no', 'ha', 'hi', 'fu', 'he',
                  'ho', 'ma', 'mi', 'mu', 'me', 'mo', 'ya', 'yu', 'yo', 'ra', 'ri', 'ru', 're', 'ro',
                  'wa', 'wo']
+        questBank = []
+        if len(args):
+            if args[0] == 'k': questBank += katakana
+            elif args[0] == 'h': questBank += hiragana
+            else: questBank += random.choice([hiragana, katakana])
+        else:
+            questBank += random.choice([hiragana, katakana])
 
         wordLen = random.randint(1, 5)
         quest = ""
         ans = ""
         for _ in range(wordLen):
             letterIndex = random.choice(range(len(romaji)))
-            quest += hiragana[letterIndex]
+            quest += questBank[letterIndex]
             ans += romaji[letterIndex]
 
 
@@ -176,64 +184,3 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
                 await context.send('Correct.')
             else:
                 await context.send('Wrong answer.\nCorrect answer: ' + ans)
-
-
-    @commands.command(name='k', brief=des__j, description=des__j)
-    async def sadf(self, context):
-        hiragana = "アイウエオカキクケコサシスセソタチツテト"
-        trans = ["a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "shi", "su", "se", "so",
-                 "ta", "chi", "tsu", "te", "to"]
-        hiragana2 = "ナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲ"
-        n = "ン"
-        
-        trans2 = ['na',
-                'ni',
-                'nu',
-                'ne',
-                'no',
-                'ha',
-                'hi',
-                'fu',
-                'he',
-                'ho',
-                'ma',
-                'mi',
-                'mu',
-                'me',
-                'mo',
-                'ya',
-                'yu',
-                'yo',
-                'ra',
-                'ri',
-                'ru',
-                're',
-                'ro',
-                'wa',
-                'wo'
-        ]
-        
-        trans = trans + trans2
-        hiragana = hiragana + hiragana2
-        
-        lim = len(trans)
-        wordLen = random.randint(1, 5)
-        quest = ""
-        ans = ""
-        possible = range(lim)
-        for _ in range(wordLen):
-            word = random.choice(possible)
-            quest += hiragana[word]
-            ans += trans[word]
-
-
-        await context.send(quest)
-        try:
-            msg = await self.bot.wait_for('message', timeout=10.0, check=lambda msg: msg.author == context.author)
-        except asyncio.TimeoutError:
-            await context.send('Cham qua ' + ans)
-        else:
-            if (msg.content.strip() == ans):
-                await context.send('OK')
-            else:
-                await context.send('Sai roi phai la ' + ans)
