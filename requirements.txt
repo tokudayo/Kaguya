@@ -5,3 +5,5 @@ requests
 matplotlib
 tabulate
 wikipedia
+gtts
+pynacl

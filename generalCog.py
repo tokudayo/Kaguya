@@ -1,4 +1,4 @@
-import discord, random, asyncio, utils
+import discord, random, asyncio, utils, os
 from discord.ext import commands
 from webster import Word
 from wiki import WikiPage
@@ -184,3 +184,29 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
                 await context.send('Correct.')
             else:
                 await context.send('Wrong answer.\nCorrect answer: ' + ans)
+
+
+
+
+    @commands.command(name='speak', brief='des__jap', description='des__jap', aliases=['s'])
+    async def speak(self, context, *args):
+        FFMPEG = os.getenv('FFMPEG')
+        sentence = ""
+        for word in args[:-1]: sentence += word + ' '
+        lang = 'vi'
+        if args[-1] not in ['vi', 'en', 'ru', 'ja', 'de']:
+            sentence += args[-1]
+        else: lang = args[-1]
+        sentence = sentence.strip()
+        from gtts import gTTS
+        tts = gTTS(sentence, lang=lang)
+        tts.save('./output/tts.mp3')
+        try:
+            voice = context.guild.voice_channels[0]
+        except:
+            pass
+        voiceConn = await voice.connect()
+        voiceConn.play(discord.FFmpegPCMAudio(executable=FFMPEG, source='./output/tts.mp3'))
+        while voiceConn.is_playing():
+            pass
+        await voiceConn.disconnect()
