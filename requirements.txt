@@ -1,9 +1,0 @@
-discord
-python-dotenv
-asyncio
-requests
-matplotlib
-tabulate
-wikipedia
-gtts
-pynacl

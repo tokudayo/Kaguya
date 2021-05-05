@@ -1,4 +1,4 @@
-import discord, random, asyncio, utils, os
+import discord, random, asyncio, utils, os, time
 from discord.ext import commands
 from webster import Word
 from wiki import WikiPage
@@ -26,6 +26,10 @@ class GeneralPurpose(commands.Cog, name='General Commands'):
     def __init__(self, bot):
         self.bot = bot
         self.loadResponse()
+        try:
+            os.mkdir('output')
+        except:
+            pass
 
 
     @commands.command(name='insult', help='Roasts a random dude or a specific person.', aliases=['roast'])
